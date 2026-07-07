@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40f2cf63d50d6c703a172ad380b77ae33dc004aa0d": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/gemini.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "obtenerIngredientes",
+          "filename": "app/actions/gemini.tsx"
+        }
+      },
+      "exportedName": "obtenerIngredientes",
+      "filename": "app/actions/gemini.tsx"
+    }
+  },
+  "edge": {}
+}
