@@ -42,6 +42,8 @@ export default function CameraScanner({ onFotoCapturada }: CamaraScannerProps) {
 
   return (
     <div className="flex flex-col items-center">
+      <p className="text-gray-600 text-center">
+          Toma una foto a tus ingredientes.</p>
       <div className="flex justify-center my-4">
         <video ref={videoRef} autoPlay playsInline width="400" height="300" className="rounded-lg shadow-md"></video>
       </div>
