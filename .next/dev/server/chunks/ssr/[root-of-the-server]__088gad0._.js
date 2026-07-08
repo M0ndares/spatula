@@ -119,15 +119,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$google$2f$
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/action-validate.js [app-rsc] (ecmascript)");
 ;
 ;
-const tokenServidor = process.env.GEMINI_TOKEN;
-console.log(typeof tokenServidor);
 const ai = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$google$2f$genai$2f$dist$2f$node$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["GoogleGenAI"]({
-    apiKey: process.env.NEXT_PUBLIC_GEMINI_TOKEN
+    apiKey: ("TURBOPACK compile-time value", "AQ.Ab8RN6IZvoX5bzYkwfgsjRAWyzC3WeZCUJmYOldbZ2O8RrFBTA")
 });
 async function obtenerIngredientes(fotoUrl) {
     const foto64 = fotoUrl.includes(",") ? fotoUrl.split(",")[1] : fotoUrl;
     const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-2.5-flash',
         contents: [
             {
                 inlineData: {
@@ -135,7 +133,7 @@ async function obtenerIngredientes(fotoUrl) {
                     mimeType: 'image/png'
                 }
             },
-            "Tell me the ingridients that you see in this image and how many are there of each one separating them with a comma. If there is no ingridients in the image say 'No hay ingredientes en la imagen'. IT IS PROHIBITED TO SAY ANYTHING MORE THAN THAT."
+            "Tell me the ingridients that you see in this image and how many are there of each one separating them with a comma. If there is no ingridients in the image say 'No ingridients identified'. IT IS PROHIBITED TO SAY ANYTHING MORE THAN THAT."
         ]
     });
     return response.text;

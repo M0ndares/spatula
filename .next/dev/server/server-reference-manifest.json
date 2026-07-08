@@ -1,16 +1,40 @@
 {
   "node": {
-    "40f2cf63d50d6c703a172ad380b77ae33dc004aa0d": {
+    "404f5caa1f8daf2cd4484f8bbb51b7eeee324c5556": {
       "workers": {
         "app/page": {
-          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/gemini.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false,
           "exportedName": "obtenerIngredientes",
-          "filename": "app/actions/gemini.tsx"
+          "filename": "app/actions/ingredients.tsx"
         }
       },
-      "filename": "app/actions/gemini.tsx",
+      "filename": "app/actions/ingredients.tsx",
       "exportedName": "obtenerIngredientes"
+    },
+    "406c27f49533d10a8a25ce7024b8497640abd5f77e": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "createRecipes",
+          "filename": "app/actions/recipe.tsx"
+        }
+      },
+      "filename": "app/actions/recipe.tsx",
+      "exportedName": "createRecipes"
+    },
+    "60c7e4bcde681803064c10d5d4490e9ff2ad94e15a": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "infoRecipe",
+          "filename": "app/actions/info.tsx"
+        }
+      },
+      "filename": "app/actions/info.tsx",
+      "exportedName": "infoRecipe"
     }
   },
   "edge": {},
