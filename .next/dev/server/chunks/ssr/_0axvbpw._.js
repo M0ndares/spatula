@@ -30,7 +30,7 @@ async function obtenerIngredientes(fotoUrl) {
               "For uncountable ingredients (like rice, flour, sugar, water), DO NOT return just a number. " +
               "Instead, use visual estimates like '1 cup of rice', 'a handful of spinach', '1 bowl', 'half a package'. " +
               "Return the results as a comma-separated list. Example: 2 tomatoes, 1 cup of rice, a handful of cilantro, '1 pear', '3 pineapples'. +
-              "DO NOT RETURN ANYTHING BESIDES THE LIST"`
+              "DO NOT RETURN ANYTHING BESIDES THE LIST"` + "If no ingredients are visible return No ingredients identified."
                     },
                     {
                         type: "image_url",

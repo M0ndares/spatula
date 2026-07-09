@@ -12,8 +12,8 @@ export default function PhotoCapture({ fotoUrl, onReiniciarCamara }: PhotoScanne
       <img src={fotoUrl} alt="Tu refri" className="rounded-lg max-w-full h-auto shadow" />      
         <button 
         onClick={onReiniciarCamara} 
-        className="bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-6">
-        Tomar otra foto
+        className="bg-red-800 hover:bg-red-900 cursor-pointer text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-6">
+        Take another photo
       </button>
     </div>
   );

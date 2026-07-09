@@ -6,7 +6,7 @@ import IngredientsIdentifier from "./components/ingredientsIdentifier";
 import RecipeMaker from "./components/recipeMaker";
 import InfoRecipe from "./components/infoRecipe";
 
-export default function Spattula() {
+export default function Spatula() {
   const [foto, setFoto] = useState<string | null>(null);
   const [ingredients, setIngredients] = useState<string | null>(null);
   const [currentRecipe, setCurrentRecipe] = useState<string | null>(null);
@@ -20,11 +20,46 @@ export default function Spattula() {
   };
 
   return (
-    <main className="p-12 max-w-md mx-auto bg-gray-50 min-h-screen">
-      <a onClick={() => setFoto(null)}>
-         <img src={'spatula.png'} className="mb-6 cursor-pointer" alt="Spatula Logo" />
-      </a>
-      <section className="mt-8 border-t pt-6">
+    <main className="p-1 max-w-md mx-auto bg-gray-50 min-h-screen">
+    <nav className="w-full bg-red-50 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 px-4 py-3 shadow-sm">
+      <div className="w-full flex justify-between items-center">
+        <a 
+          onClick={() => setFoto(null)} 
+          className="flex items-center justify-center cursor-pointer active:scale-95 transition-transform"
+        >
+          <img 
+            src={'logo.png'} 
+            className="h-8 w-auto object-contain" // 💡 Quitamos mb-6 y controlamos su altura
+            alt="Spatula Logo" 
+          />
+        </a>
+
+        <ul className="flex items-center gap-4 text-sm font-semibold text-gray-600">
+          <li className="flex items-center gap-1 cursor-pointer hover:text-red-900 transition-colors group">
+            <span className="material-symbols-outlined text-[22px]">
+              egg_alt
+            </span>
+            <span className="hidden sm:inline">Recipes</span>
+          </li>
+
+          <li className="flex items-center gap-1 cursor-pointer hover:text-red-900 transition-colors group">
+            <span className="material-symbols-outlined text-[22px]">
+              star
+            </span>
+            <span className="hidden sm:inline">Bookmarks</span>
+          </li>
+
+          <li className="flex items-center gap-1 cursor-pointer hover:text-red-900 transition-colors group">
+            <span className="material-symbols-outlined text-[22px]">
+              account_circle
+            </span>
+            <span className="hidden sm:inline">Profile</span>
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+      <section className="mt-4 border-t pt-4">
       
       {!foto && (
         <div className="flex flex-col items-center">

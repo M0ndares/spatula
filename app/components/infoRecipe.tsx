@@ -38,6 +38,7 @@ export default function InfoRecipe({ ingredients, currentRecipe } : InfoRecipePr
     <div className="w-full flex flex-col gap-4">
       {recipeInfo && (
         <div className="bg-white p-6 rounded-lg shadow-sm border text-red-800 w-full prose">
+          <span className="material-symbols-outlined">star</span>
           <h2 className="text-2xl text-red-900 font-bold mb-4 border-b pb-2">{currentRecipe}</h2>
           <p className="whitespace-pre-line text-base leading-relaxed">{recipeInfo}</p>
         </div>
