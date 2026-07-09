@@ -43,7 +43,7 @@ export default function CameraScanner({ onFotoCapturada }: CamaraScannerProps) {
   return (
     <div className="flex flex-col items-center">
       <p className="text-gray-600 text-center">
-          Toma una foto a tus ingredientes.</p>
+          Take a photo of your ingredients.</p>
       <div className="flex justify-center my-4">
         <video ref={videoRef} autoPlay playsInline width="400" height="300" className="rounded-lg shadow-md"></video>
       </div>
@@ -51,9 +51,9 @@ export default function CameraScanner({ onFotoCapturada }: CamaraScannerProps) {
       
       <button 
         onClick={capturarFoto}
-        className="bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-4"
+        className="bg-red-800 hover:bg-red-900 cursor-pointer text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-4"
       >
-        Tomar Foto
+        Capture photo
       </button>
     </div>
   );

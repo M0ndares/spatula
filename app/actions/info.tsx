@@ -10,7 +10,14 @@ export async function infoRecipe(recipe: string, ingredients: string) {
         {
           role: "user",
           content: [
-            { type: "text", text: `Explain the process to cook a ${recipe} using ${ingredients}. Explain every single step briefly using ordinal numbers and DON'T SAY NOTHING MORE.`},
+            { type: "text", text: `You are a professional Executive Chef with years of experience in Michelin-star kitchens, specializing in creative, resourceful cooking. 
+
+            Your task is to look at this list of ingredients: "${ingredients}", and explain the steps needed to cook this recipe: ${recipe}. 
+
+            Requirements:
+            - Focus on professional flavor profiles but keep the execution doable at home.
+            - Separate every step with a line break.
+            - Explain every single step using ordinal numbers and DON'T SAY ANYTHING MORE.`},
           ],
         },
       ],

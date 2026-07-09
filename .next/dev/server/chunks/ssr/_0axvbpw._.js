@@ -25,7 +25,12 @@ async function obtenerIngredientes(fotoUrl) {
                 content: [
                     {
                         type: "text",
-                        text: `Identify the ingredients in this image and how many are there of each one. If there is no ingredients return No ingredients identified.. Return only a comma-separated list.`
+                        text: `Identify the ingredients in this image and their approximate culinary amounts. " +
+              "For countable ingridients (like avocado, apples, plums) you may return a number." +
+              "For uncountable ingredients (like rice, flour, sugar, water), DO NOT return just a number. " +
+              "Instead, use visual estimates like '1 cup of rice', 'a handful of spinach', '1 bowl', 'half a package'. " +
+              "Return the results as a comma-separated list. Example: 2 tomatoes, 1 cup of rice, a handful of cilantro, '1 pear', '3 pineapples'. +
+              "DO NOT RETURN ANYTHING BESIDES THE LIST"`
                     },
                     {
                         type: "image_url",
@@ -70,7 +75,15 @@ async function createRecipes(ingredients) {
                 content: [
                     {
                         type: "text",
-                        text: `Expose 3 popular recipes just by using ${ingredients} and nothing more. Return only a comma-separated list.`
+                        text: `You are a professional Executive Chef with years of experience in Michelin-star kitchens, specializing in resourceful cooking. 
+
+            Your task is to look at this list of ingredients: "${ingredients}", and design just 3 realistic and delicious recipes that can be made at home. 
+
+            Requirements:
+            - Don't create a recipe that includes any other ingredient not presented previously.
+            - Format the output as a comma-separated list of recipes where each recipe includes its name.
+            - Separate each recipe ONLY with a comma (,)
+            - Don't return ANYTHING more than that`
                     }
                 ]
             }
@@ -109,7 +122,14 @@ async function infoRecipe(recipe, ingredients) {
                 content: [
                     {
                         type: "text",
-                        text: `Explain the process to cook a ${recipe} using ${ingredients}. Explain every single step briefly using ordinal numbers and DON'T SAY NOTHING MORE.`
+                        text: `You are a professional Executive Chef with years of experience in Michelin-star kitchens, specializing in creative, resourceful cooking. 
+
+            Your task is to look at this list of ingredients: "${ingredients}", and explain the steps needed to cook this recipe: ${recipe}. 
+
+            Requirements:
+            - Focus on professional flavor profiles but keep the execution doable at home.
+            - Separate every step with a line break.
+            - Explain every single step using ordinal numbers and DON'T SAY ANYTHING MORE.`
                     }
                 ]
             }

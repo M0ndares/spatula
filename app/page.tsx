@@ -45,7 +45,7 @@ export default function Spattula() {
             onClick={() => setMostrarRecetas(true)}
             disabled={!ingredients || ingredients === 'No ingredients identified.'}
             className={`text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-6 ${
-              ingredients || ingredients === 'No ingredients identified.'
+              !ingredients || ingredients === 'No ingredients identified.'
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-red-800 hover:bg-red-900 cursor-pointer" 
             }`}
@@ -64,7 +64,7 @@ export default function Spattula() {
 
           <button 
             onClick={() => setFoto(null)}
-            className="text-sm text-gray-500 underline mt-4 cursor-pointer"
+            className="text-sm text-gray-400 hover:text-gray-500 underline mt-4 cursor-pointer"
           >
             Take another photo
           </button>
@@ -77,14 +77,14 @@ export default function Spattula() {
           
           <button 
             onClick={() => setCurrentRecipe(null)}
-            className="text-sm text-red-600 font-semibold underline mt-6 block cursor-pointer"
+            className="text-sm text-red-800 hover:text-red-900 font-semibold underline mt-6 block cursor-pointer"
           >
             ← Back to recipes list
           </button>
 
           <button 
             onClick={() => setFoto(null)}
-            className="text-sm text-gray-400 underline mt-2 cursor-pointer"
+            className="text-sm text-gray-400 hover:text-gray-500 underline mt-2 cursor-pointer"
           >
             Take another photo
           </button>

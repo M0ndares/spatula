@@ -9,7 +9,15 @@ export async function createRecipes(ingredients: string) {
         {
           role: "user",
           content: [
-            { type: "text", text:  `Expose 3 popular recipes just by using ${ingredients} and nothing more. Return only a comma-separated list.`},
+            { type: "text", text:  `You are a professional Executive Chef with years of experience in Michelin-star kitchens, specializing in resourceful cooking. 
+
+            Your task is to look at this list of ingredients: "${ingredients}", and design just 3 realistic and delicious recipes that can be made at home. 
+
+            Requirements:
+            - Don't create a recipe that includes any other ingredient not presented previously.
+            - Format the output as a comma-separated list of recipes where each recipe includes its name.
+            - Separate each recipe ONLY with a comma (,)
+            - Don't return ANYTHING more than that`},
           ],
         },
       ],

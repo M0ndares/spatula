@@ -30,7 +30,7 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
 
   return (
     <div className="w-full flex flex-col gap-4 bg-gradient-to-b from-gray-50 to-white p-5 rounded-2xl shadow-md border border-gray-100">
-  <h2 className="text-2xl text-red-600 font-extrabold mb-2 border-b-2 border-red-100 pb-3 flex items-center gap-2">
+  <h2 className="text-2xl text-red-900 font-extrabold mb-2 border-b-2 border-red-100 pb-3 flex items-center gap-2">
      Ideal Recipes
   </h2>
   
