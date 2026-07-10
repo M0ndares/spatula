@@ -7,13 +7,15 @@ import RecipeMaker from "./components/recipeMaker";
 import InfoRecipe from "./components/infoRecipe";
 import NavigationBar from "./components/navigationBar";
 import MenuSpatula from "./components/menuSpatula";
+import BookmarksSection from "./components/bookmarksSection";
 
 export default function Spatula() {
   const [photo, setPhoto] = useState<string | null>(null);
   const [ingredients, setIngredients] = useState<string | null>(null);
   const [currentRecipe, setCurrentRecipe] = useState<string | null>(null);
   const [mostrarRecetas, setMostrarRecetas] = useState<boolean>(false);
-  const [currentTab, setCurrentTab] = useState<string>('recipes');
+  const [currentTab, setCurrentTab] = useState<string>('menu');
+  const [currentBookmarks, setCurrentBookmarks] = useState<string[]>([]) // select * bookmarks where userId = inner join on (user where activo = 1)
 
   const newPhoto = (urlDeLaPhoto: string) => {
     setPhoto(urlDeLaPhoto);
@@ -28,6 +30,7 @@ export default function Spatula() {
     setCurrentRecipe(null);
     setMostrarRecetas(false);
     setCurrentTab(tab);
+    setCurrentBookmarks(['1', '2'])
   };
 
   return (
@@ -99,7 +102,8 @@ export default function Spatula() {
 
             <button 
               onClick={() => setPhoto(null)}
-              className="text-sm text-gray-400 hover:text-gray-500 underline mt-2 cursor-pointer"
+              className="text-sm text-gray-400 hover:text-y
+              gray-500 underline mt-2 cursor-pointer hover:text-gray-500"
             >
               Take another photo
             </button>
@@ -109,7 +113,7 @@ export default function Spatula() {
       )}
       {currentTab === 'bookmarks' && (
           <section className="mt-4 pt-4">
-
+            <BookmarksSection bookmarks={currentBookmarks} onSelectRecipe={(recetaSeleccionada: string) => setCurrentRecipe(recetaSeleccionada)}></BookmarksSection>
           </section>
       )}
       {currentTab === 'user' && (

@@ -1,5 +1,6 @@
 "use client";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { fonts } from "../actions/fonts";
 
 interface CamaraScannerProps {
   onCapturedPhoto: (dataUrl: string) => void;
@@ -8,11 +9,12 @@ interface CamaraScannerProps {
 export default function CameraScanner({ onCapturedPhoto }: CamaraScannerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
+  
   useEffect(() => {
     let streamActual: MediaStream | null = null;
 
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    
       .then((stream) => {
         streamActual = stream;
         if (videoRef.current) videoRef.current.srcObject = stream;
@@ -42,7 +44,11 @@ export default function CameraScanner({ onCapturedPhoto }: CamaraScannerProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <p className="text-gray-600 text-center">
+      <h1 className={`text-5xl sm:text-6xl text-center font-light tracking-tight font-serif ${fonts()}`}>
+            <span className={`font-serif italic duration-500 transform`}>Recipes</span>
+      </h1>
+      <br></br>
+      <p className="text-gray-500 text-center">
           Take a photo of your ingredients.</p>
       <div className="flex justify-center my-4">
         <video ref={videoRef} autoPlay playsInline width="350" height="200" className="rounded-lg shadow-md"></video>

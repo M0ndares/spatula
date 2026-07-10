@@ -1,31 +1,14 @@
 "use client"
 import { useEffect, useState } from "react"
+import { fonts } from "../actions/fonts";
 
 export default function MenuSpatula() {
     
-  const fuentes = [
-    "font-serif italic text-gray-400 ",         
-    "font-mono tracking-widest text-gray-400 ", 
-    "font-mono italic text-[#2a1212]",                  
-    "font-mono tracking-widest text-[#2a1212]",  
-  ];
-  const [indexFuente, setIndexFuente] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-        setIndexFuente((prevIndex) => (prevIndex + 1) % fuentes.length);
-        }, 2000);
-
-        return () => clearInterval(interval); 
-     }, [fuentes.length]);
-
     return (
         <section>
-                <div className="max-w-xl text-center space-y-8">
-            
-          
+            <div className="max-w-xl text-center space-y-8">
             <h1 className="text-5xl sm:text-6xl font-light tracking-tight text-red-900 font-serif">
-                Let's <span className={`font-serif italic duration-500 transform ${fuentes[indexFuente]}`}>bake</span> it.
+                Let's <span className={`font-serif italic duration-500 transform ${fonts()}`}>bake</span> it.
             </h1>
               <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block">
                 -— trending: summer '26 —-

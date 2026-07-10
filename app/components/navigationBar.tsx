@@ -25,7 +25,7 @@ export default function NavigationBar({ currentTab, onNavigate }: NavigationBarP
           <li 
             onClick={() => onNavigate('recipes')} 
             className={`flex items-center gap-1 cursor-pointer transition-colors group ${
-            currentTab === 'recipes' ? 'text-red-800 font-bold' : 'text-white-600 hover:text-red-800'
+            currentTab === 'recipes' ? 'text-red-800 font-bold' : 'text-white hover:text-gray-400'
             }`}
           >
             <span className="material-symbols-outlined text-[22px]">egg_alt</span>
@@ -34,16 +34,16 @@ export default function NavigationBar({ currentTab, onNavigate }: NavigationBarP
           <li 
             onClick={() => onNavigate('bookmarks')} 
             className={`flex items-center gap-1 cursor-pointer transition-colors group ${
-              currentTab === 'bookmarks' ? 'text-red-800 font-bold' : 'text-white-600 hover:text-red-800'
+              currentTab === 'bookmarks' ? 'text-red-800 font-bold' : 'text-white-600 hover:text-gray-400'
             }`}
           >
-            <span className="material-symbols-outlined text-[22px]">star</span>
-            <span className="hidden sm:inline">Favourites</span>
+            <span className="material-symbols-outlined text-[22px]">bookmark</span>
+            <span className="hidden sm:inline">Bookmarks</span>
           </li>
           <li 
             onClick={() => onNavigate('profile')} 
             className={`flex items-center gap-1 cursor-pointer transition-colors group ${
-            currentTab === 'profile' ? 'text-red-800 font-bold' : 'text-white-600 hover:text-red-800'
+            currentTab === 'profile' ? 'text-red-800 font-bold' : 'text-white-600 hover:text-gray-400'
             }`}
           >
             <span className="material-symbols-outlined text-[22px]">account_circle</span>

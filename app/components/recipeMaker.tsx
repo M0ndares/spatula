@@ -44,7 +44,7 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
               <div
                 key={index}
                 onClick={() => onSelectRecipe(recetaLimpia)}
-                className="p-4 bg-[#1f0b0b] rounded-xl border border-red-950/40 text-left cursor-pointer
+                className="p-4 bg-red-900 rounded-xl border border-red-950/40 text-left cursor-pointer
                           shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 hover:bg-[#2a1212]
                           transition-all duration-200 transform hover:-translate-y-0.5 group"
               >
