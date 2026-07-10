@@ -3,19 +3,19 @@ import { useState, useEffect } from 'react';
 import { obtenerIngredientes } from '../actions/ingredients'; 
 
 interface IngredientsIdentifierProps {
-  fotoUrl: string; 
+  photoUrl: string; 
   onIngredientesIdentificados: (ingredientes: string) => void; 
 }
 
-export default function IngredientsIdentifier({ fotoUrl, onIngredientesIdentificados }: IngredientsIdentifierProps) {
+export default function IngredientsIdentifier({ photoUrl, onIngredientesIdentificados }: IngredientsIdentifierProps) {
   const [ingredientes, setIngredientes] = useState<string>("Cargando ingredientes...");
 
   useEffect(() => {
     async function llamarServerAction() {
       try {
-        if (!fotoUrl) return;
+        if (!photoUrl) return;
         setIngredientes("Analizando imagen...");
-        const texto = await obtenerIngredientes(fotoUrl);
+        const texto = await obtenerIngredientes(photoUrl);
         
         if (texto) {
           setIngredientes(texto);
@@ -27,7 +27,7 @@ export default function IngredientsIdentifier({ fotoUrl, onIngredientesIdentific
     }
 
     llamarServerAction();
-  }, [fotoUrl]); 
+  }, [photoUrl]); 
 
   return (
     <div className="bg-white rounded-lg shadow-sm border text-gray-500 text-center w-full">

@@ -2,10 +2,10 @@
 import { useRef, useEffect } from "react";
 
 interface CamaraScannerProps {
-  onFotoCapturada: (dataUrl: string) => void;
+  onCapturedPhoto: (dataUrl: string) => void;
 }
 
-export default function CameraScanner({ onFotoCapturada }: CamaraScannerProps) {
+export default function CameraScanner({ onCapturedPhoto }: CamaraScannerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -24,7 +24,7 @@ export default function CameraScanner({ onFotoCapturada }: CamaraScannerProps) {
     };
   }, []);
 
-  const capturarFoto = () => {
+  const takePhoto = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
@@ -35,7 +35,7 @@ export default function CameraScanner({ onFotoCapturada }: CamaraScannerProps) {
       if (contexto) {
         contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
         const urlDeLaFoto = canvas.toDataURL("image/png");
-        onFotoCapturada(urlDeLaFoto);
+        onCapturedPhoto(urlDeLaFoto);
       }
     }
   };
@@ -45,13 +45,15 @@ export default function CameraScanner({ onFotoCapturada }: CamaraScannerProps) {
       <p className="text-gray-600 text-center">
           Take a photo of your ingredients.</p>
       <div className="flex justify-center my-4">
-        <video ref={videoRef} autoPlay playsInline width="400" height="300" className="rounded-lg shadow-md"></video>
+        <video ref={videoRef} autoPlay playsInline width="350" height="200" className="rounded-lg shadow-md"></video>
       </div>
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
       
       <button 
-        onClick={capturarFoto}
-        className="bg-red-800 hover:bg-red-900 cursor-pointer text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-4"
+        onClick={takePhoto}
+        className="bg-red-800 cursor-pointer
+                       shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 hover:bg-[#2a1212]
+                       transition-all duration-200 transform hover:-translate-y-0.5 group text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-4"
       >
         Capture photo
       </button>
