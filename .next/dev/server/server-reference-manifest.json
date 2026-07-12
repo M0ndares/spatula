@@ -71,6 +71,18 @@
       },
       "filename": "app/actions/userDb.ts",
       "exportedName": "currentUser"
+    },
+    "701c0065fa5c3cdc87a7fa9d84f04252a79485a18e": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE3 => \"[project]/app/actions/recipesDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE4 => \"[project]/app/actions/bookmarksDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE5 => \"[project]/app/actions/userDb.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "registerUser",
+          "filename": "app/actions/userDb.ts"
+        }
+      },
+      "filename": "app/actions/userDb.ts",
+      "exportedName": "registerUser"
     }
   },
   "edge": {},

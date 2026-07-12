@@ -25,20 +25,11 @@ export async function currentUser() {
 }
 
 export async function registerUser(email: string, password: string, username: string) {
-  const supabase = await createClient();
+  const { user } = await loginUser(email, password)
 
-  const { data, error } = await supabase.auth.signUp({
-    email: email,
-    password: password, 
-  });
-
-  if (error) {
-    return { success: false, error: error.message };
-  }
-
-  if (data.user) {
+  if (user) {
     db.insert(profiles).values({ 
-        id: data.user.id,
+        id: user.id,
         name: username, 
         isActive: false,
       })

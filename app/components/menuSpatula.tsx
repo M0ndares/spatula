@@ -9,38 +9,37 @@ interface Recipe {
 }
 
 export default function MenuSpatula() {
-  const topRecipes = ['2', '5', '9']
+  const topRecipes = [null]
   
   const [recipes, setRecipes] = useState<Recipe[] | null>(null)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchTopRecipes() {
       try {
         const promises = topRecipes.map((id) => getRecipeById(id))
         const recetasObtenidas = await Promise.all(promises)
-        setRecipes(recetasObtenidas)
+        if (recetasObtenidas) setRecipes(recetasObtenidas.flat().filter(Boolean) as Recipe[])
       } catch (error) {
         console.error("Error cargando recetas top:", error)
-      } finally {
-        setLoading(false)
-      }
+      } 
     }
 
     fetchTopRecipes()
-  }, []) }
+  }, 
+[]) 
 
 
   return (
-    <section>
-      <div className="max-w-xl text-center space-y-8">
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight text-red-900 font-serif">
-          Let's <span className={`font-serif italic duration-500 transform ${fonts()}`}>bake</span> it.
-        </h1>
-        <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block">
-          -— trending: summer '26 —-
-        </span>
-        
+  <section>
+    <div className="max-w-xl text-center space-y-8 mx-auto p-4">
+      <h1 className="text-5xl sm:text-6xl font-light tracking-tight text-red-900 font-serif">
+        Let's <span className="font-serif italic duration-500 transform">bake</span> it.
+      </h1>
+      <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block">
+        -— trending: summer '26 —-
+      </span>
+
+      <div className="space-y-4 mt-6">
         {recipes && recipes.map((recipe) => {
           return (
             <div
@@ -62,6 +61,8 @@ export default function MenuSpatula() {
           )
         })}
       </div>
-    </section>
+
+    </div>
+  </section>
   )
 }
