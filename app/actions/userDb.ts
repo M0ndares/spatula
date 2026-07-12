@@ -12,10 +12,10 @@ export async function loginUser(email: string, password: string) {
   });
 
   if (error) {
-    return { success: false, error: error.message };
+    return { success: false, error: error.message, user: true };
   }
 
-  return { success: true, user: data.user };
+  return { success: true, error: null, user: data.user };
 }
 
 export async function currentUser() {
@@ -24,16 +24,24 @@ export async function currentUser() {
     return user
 }
 
-export async function registerUser(email: string, password: string, username: string) {
-  const { user } = await loginUser(email, password)
 
-  if (user) {
-    db.insert(profiles).values({ 
-        id: user.id,
+export async function registerUser(email: string, password: string, username: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  });
+  if (error) {
+    console.log(error)
+    return{ success: false, error: error.message}
+  }
+  if (data.user) {
+    await db.insert(profiles).values({ 
+        id: data.user.id,
         name: username, 
         isActive: false,
       })
   }
 
-  return { success: true };
+  return { success: true, error: null };
 }

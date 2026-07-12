@@ -117,6 +117,7 @@ export default function Spatula() {
       )}
       {currentTab === 'profile' && (
           <section className="mt-4 pt-4">
+            
             <ProfileSection></ProfileSection>
           </section>
       )}

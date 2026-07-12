@@ -9,7 +9,7 @@ interface Recipe {
 }
 
 export default function MenuSpatula() {
-  const topRecipes = [null]
+  const topRecipes = ['2bafe6b2-fedf-47dd-9562-fdf278fbea84', 'b8558334-39e5-4837-809a-894c6dd03643', 'd3e734a7-3eb5-47d0-88c7-4ed363a50e7b']
   
   const [recipes, setRecipes] = useState<Recipe[] | null>(null)
 
@@ -33,7 +33,7 @@ export default function MenuSpatula() {
   <section>
     <div className="max-w-xl text-center space-y-8 mx-auto p-4">
       <h1 className="text-5xl sm:text-6xl font-light tracking-tight text-red-900 font-serif">
-        Let's <span className="font-serif italic duration-500 transform">bake</span> it.
+        Let's <span className={`font-serif italic duration-500 transform ${fonts()}`}>cook</span> it.
       </h1>
       <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block">
         -— trending: summer '26 —-
