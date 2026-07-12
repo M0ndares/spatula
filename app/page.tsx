@@ -8,6 +8,7 @@ import InfoRecipe from "./components/infoRecipe";
 import NavigationBar from "./components/navigationBar";
 import MenuSpatula from "./components/menuSpatula";
 import BookmarksSection from "./components/bookmarksSection";
+import ProfileSection from "./components/profileSection";
 
 export default function Spatula() {
   const [photo, setPhoto] = useState<string | null>(null);
@@ -15,7 +16,6 @@ export default function Spatula() {
   const [currentRecipe, setCurrentRecipe] = useState<string | null>(null);
   const [mostrarRecetas, setMostrarRecetas] = useState<boolean>(false);
   const [currentTab, setCurrentTab] = useState<string>('menu');
-  const [currentBookmarks, setCurrentBookmarks] = useState<string[]>([]) // select * bookmarks where userId = inner join on (user where activo = 1)
 
   const newPhoto = (urlDeLaPhoto: string) => {
     setPhoto(urlDeLaPhoto);
@@ -30,7 +30,6 @@ export default function Spatula() {
     setCurrentRecipe(null);
     setMostrarRecetas(false);
     setCurrentTab(tab);
-    setCurrentBookmarks(['1', '2'])
   };
 
   return (
@@ -113,12 +112,12 @@ export default function Spatula() {
       )}
       {currentTab === 'bookmarks' && (
           <section className="mt-4 pt-4">
-            <BookmarksSection bookmarks={currentBookmarks} onSelectRecipe={(recetaSeleccionada: string) => setCurrentRecipe(recetaSeleccionada)}></BookmarksSection>
+            <BookmarksSection onSelectRecipe={(recetaSeleccionada: string) => setCurrentRecipe(recetaSeleccionada)}></BookmarksSection>
           </section>
       )}
-      {currentTab === 'user' && (
+      {currentTab === 'profile' && (
           <section className="mt-4 pt-4">
-            
+            <ProfileSection></ProfileSection>
           </section>
       )}
     </main>
