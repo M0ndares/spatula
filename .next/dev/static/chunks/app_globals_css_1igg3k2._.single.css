@@ -68,9 +68,12 @@
     --color-red-300: #ffa3a3;
     --color-red-400: #ff6568;
     --color-red-600: #e40014;
+    --color-red-700: #bf000f;
     --color-red-800: #9f0712;
     --color-red-900: #82181a;
     --color-red-950: #460809;
+    --color-green-100: #dcfce7;
+    --color-green-700: #008138;
     --color-gray-50: #f9fafb;
     --color-gray-100: #f3f4f6;
     --color-gray-400: #99a1af;
@@ -113,6 +116,7 @@
     --radius-lg: .5rem;
     --radius-xl: .75rem;
     --radius-2xl: 1rem;
+    --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
     --blur-sm: 8px;
     --default-transition-duration: .15s;
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
@@ -127,9 +131,12 @@
       --color-red-300: lab(76.5514% 36.4219 15.5335);
       --color-red-400: lab(63.7053% 60.7449 31.3109);
       --color-red-600: lab(48.4493% 77.4328 61.5452);
+      --color-red-700: lab(40.4273% 67.2623 53.7441);
       --color-red-800: lab(33.7174% 55.8993 41.0293);
       --color-red-900: lab(28.5139% 44.5539 29.0463);
       --color-red-950: lab(13.003% 29.04 16.7519);
+      --color-green-100: lab(96.186% -13.8464 6.52362);
+      --color-green-700: lab(47.0329% -47.0239 31.4788);
       --color-gray-50: lab(98.2596% -.247031 -.706708);
       --color-gray-100: lab(96.1596% -.082314 -1.13575);
       --color-gray-400: lab(65.9269% -.832707 -8.17474);
@@ -405,8 +412,16 @@
     top: 0;
   }
 
+  .top-6 {
+    top: calc(var(--spacing) * 6);
+  }
+
   .right-0 {
     right: 0;
+  }
+
+  .right-6 {
+    right: calc(var(--spacing) * 6);
   }
 
   .bottom-0 {
@@ -443,6 +458,10 @@
 
   .mt-6 {
     margin-top: calc(var(--spacing) * 6);
+  }
+
+  .mt-10 {
+    margin-top: calc(var(--spacing) * 10);
   }
 
   .mb-1 {
@@ -563,6 +582,10 @@
 
   .transform {
     transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+  }
+
+  .animate-pulse {
+    animation: var(--animate-pulse);
   }
 
   .cursor-not-allowed {
@@ -740,6 +763,10 @@
     background-color: var(--color-gray-400);
   }
 
+  .bg-green-100 {
+    background-color: var(--color-green-100);
+  }
+
   .bg-red-800 {
     background-color: var(--color-red-800);
   }
@@ -797,12 +824,20 @@
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
+  .fill-current {
+    fill: currentColor;
+  }
+
   .object-contain {
     object-fit: contain;
   }
 
   .p-1 {
     padding: var(--spacing);
+  }
+
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
   }
 
   .p-2\.5 {
@@ -859,6 +894,10 @@
 
   .pr-3 {
     padding-right: calc(var(--spacing) * 3);
+  }
+
+  .pr-12 {
+    padding-right: calc(var(--spacing) * 12);
   }
 
   .pb-2 {
@@ -1025,6 +1064,10 @@
     color: var(--color-gray-800);
   }
 
+  .text-green-700 {
+    color: var(--color-green-700);
+  }
+
   .text-red-100 {
     color: var(--color-red-100);
   }
@@ -1051,16 +1094,6 @@
 
   .text-red-300 {
     color: var(--color-red-300);
-  }
-
-  .text-red-400\/50 {
-    color: #ff656880;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .text-red-400\/50 {
-      color: color-mix(in oklab, var(--color-red-400) 50%, transparent);
-    }
   }
 
   .text-red-600 {
@@ -1190,6 +1223,11 @@
     transition-duration: .5s;
   }
 
+  .select-none {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
   @media (hover: hover) {
     .group-hover\:text-red-200\/60:is(:where(.group):hover *) {
       color: #ffcaca99;
@@ -1246,6 +1284,18 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-red-950\/10:hover {
+      background-color: #4608091a;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-red-950\/10:hover {
+        background-color: color-mix(in oklab, var(--color-red-950) 10%, transparent);
+      }
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:text-gray-400:hover {
       color: var(--color-gray-400);
     }
@@ -1254,6 +1304,12 @@
   @media (hover: hover) {
     .hover\:text-gray-500:hover {
       color: var(--color-gray-500);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-red-700:hover {
+      color: var(--color-red-700);
     }
   }
 
@@ -1650,6 +1706,12 @@ body {
   syntax: "*";
   inherits: false;
   initial-value: 1;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
 }
 
 /*# sourceMappingURL=app_globals_css_1igg3k2._.single.css.map*/

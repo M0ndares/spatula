@@ -13,9 +13,10 @@ interface Profile {
   bio: string | null;
   category: string;
 }
+
 export function isSupabaseUser(value: any): value is User {
-    return value !== null && typeof value === "object" && "id" in value && "email" in value;
-  }
+  return value !== null && typeof value === "object" && "id" in value && "email" in value;
+}
 
 export default function ProfileSection() {
   const [user, setUser] = useState<User | null>(null);
@@ -25,11 +26,12 @@ export default function ProfileSection() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState(""); 
   const [currentError, setCurrentError] = useState<string | null>(null);
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setCurrentError(null);
+    setIsLoading(true); 
     
     if (isSigningUp) {
       try {
@@ -37,6 +39,8 @@ export default function ProfileSection() {
         if (error) setCurrentError(error);
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     } else {
       try {
@@ -44,11 +48,16 @@ export default function ProfileSection() {
         
         if (error || !loggedUser) {
           setCurrentError(error || "Authentication failed");
+          setIsLoading(false);
           return;
         }
-        if(isSupabaseUser(loggedUser)) setUser(loggedUser);
         
-        if (!isSupabaseUser(loggedUser)) return;
+        if (!isSupabaseUser(loggedUser)) {
+          setIsLoading(false);
+          return;
+        }
+
+        setUser(loggedUser);
         const metadata = await getUserMetadata(loggedUser);
         
         if (metadata && Array.isArray(metadata) && metadata.length > 0) {
@@ -56,39 +65,52 @@ export default function ProfileSection() {
         } else if (metadata && !Array.isArray(metadata)) {
           setUserMetadata(metadata as Profile);
         }
-        
         setCurrentError(null);
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false); 
       }
     }
   };
 
   useEffect(() => {
-
-    async function fetchMetadata(supabaseUser: User) {
-    try {
-      const metadata = await getUserMetadata(supabaseUser);
-      if (metadata && Array.isArray(metadata) && metadata.length > 0) {
-        setUserMetadata(metadata[0]);
+    async function checkInitialUser() {
+      try {
+        const {success, user} = await currentUser();
+        console.log()
+        if (isSupabaseUser(user)) {
+          setUser(user);
+          
+          const metadata = await getUserMetadata(user);
+          if (metadata && Array.isArray(metadata) && metadata.length > 0) {
+            setUserMetadata(metadata[0]);
+          } else if (metadata && !Array.isArray(metadata)) {
+            setUserMetadata(metadata as Profile);
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error comprobando sesión inicial:", error);
+      } {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error cargando metadatos:", error);
     }
-  }
 
-  async function checkInitialUser() {
-    const loggedUser = await currentUser();
-    if (isSupabaseUser(loggedUser)) {
-      setUser(loggedUser);
-      await fetchMetadata(loggedUser);
-    } else {
-      setUser(null);
-    }
+    checkInitialUser();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div>
+        <h1 className={`text-5xl sm:text-6xl text-center font-light tracking-tight font-serif ${fonts()}`}>
+          <span className="font-serif italic duration-500 transform">Profile</span>
+        </h1>
+        <p className="text-center text-gray-400 text-sm mt-10">Loading profile data...</p>
+      </div>
+    );
   }
-  checkInitialUser();
-  
-}, []);
 
   return (
     <div>
@@ -96,7 +118,7 @@ export default function ProfileSection() {
         <span className={`font-serif italic duration-500 transform`}>Profile</span>
       </h1>
       <br />
-      
+
       {!user && !isSigningUp && (
         <div>
           <div className="w-full max-w-md mx-auto p-6 bg-red-950/20 rounded-2xl border border-red-950/40 backdrop-blur-sm shadow-xl">
@@ -232,7 +254,6 @@ export default function ProfileSection() {
         </div>
       )}
 
-      {/* VISTA DE PERFIL (Si el usuario existe y está validado) */}
       {isSupabaseUser(user) && (
         <div>
           <div className="flex items-center gap-5 text-left mb-5">
@@ -256,11 +277,11 @@ export default function ProfileSection() {
 
             <div className="flex flex-col justify-center">
               <h3 className="text-2xl font-light text-[#2a1212] font-serif tracking-wide leading-tight">
-                {userMetadata?.name.split(' ')[0]}
+                {userMetadata?.name ? userMetadata.name.split(' ')[0] : 'Chef'}
               </h3>
               <div className="mt-1">
                 <span className="inline-block px-2.5 py-0.5 bg-red-950/80 border border-red-900/30 rounded-full text-[9px] uppercase tracking-widest text-red-300 font-semibold">
-                  {userMetadata?.category}
+                  {userMetadata?.category || "Baker"}
                 </span>
               </div>
             </div>
@@ -296,14 +317,14 @@ export default function ProfileSection() {
                 Bio 
               </label>
               <p className="w-full p-2.5 bg-red-950/20 border border-red-950/20 rounded-xl text-red-900 text-xs italic leading-relaxed">
-                {userMetadata?.bio}
+                {userMetadata?.bio || "No bio added yet."}
               </p>
             </div>
           </div>
           
           <button
-            onClick={() => {
-              signOut();         
+            onClick={async () => {
+              await signOut();         
               setUser(null);
               setUserMetadata(null);
             }}

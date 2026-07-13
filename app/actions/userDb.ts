@@ -31,7 +31,7 @@ export async function currentUser() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if(user) return {success: true, user: user}
-    return {success: false, user: false}
+    return {success: false, user: null}
 }
 
 export async function getUserMetadata(user: User) {

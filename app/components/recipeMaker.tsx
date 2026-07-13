@@ -1,32 +1,70 @@
 "use client";
+
 import { useState, useEffect } from 'react';
 import { createRecipes } from '../actions/recipe'; 
+import { useBookmarks } from '../actions/useBookmarks'; 
+import RecipeCard from './recipeCard'; 
+
+interface Recipes {
+  id: string;
+  name: string;
+  ingredients: string;
+  steps: string;
+}
 
 interface RecipeMakerProps {
   ingredients: string; 
-  onSelectRecipe: (receta: string) => void; 
+  onSelectRecipe: (receta: Recipes) => void; 
 }
 
 export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMakerProps) {
-  const [recipe, setRecipe] = useState<string>("Generating delicious recipes for you...");
+  const [statusMessage, setStatusMessage] = useState<string>("Generating delicious recipes for you...");
+  const [recipes, setRecipes] = useState<Recipes[]>([]);  
+  const { bookmarkIds, toggleBookmark } = useBookmarks();
 
   useEffect(() => {
+    if (recipes.length > 0) return;
+
     const lookForRecipes = async () => {
-      if (!ingredients || ingredients === 'No ingredients identified') {
-        setRecipe("No valid ingredients found to generate a recipe.");
+      if (!ingredients || ingredients === 'No ingredients identified.') {
+        setStatusMessage("No valid ingredients found to generate a recipe.");
         return;
       }
+      
       try {
         const resultadoRecetas = await createRecipes(ingredients);
-        if (resultadoRecetas) setRecipe(resultadoRecetas);
-        else setRecipe("Could not generate recipes. Try again later.");
+        
+        if (resultadoRecetas && resultadoRecetas.trim() !== "") {
+          const listaProcesada = resultadoRecetas
+            .split(',')
+            .map((receta, index) => {
+              const recetaLimpia = receta.trim();
+              if (!recetaLimpia) return null;
+
+              const nombreReceta = recetaLimpia.split('\n')[0] || `Recipe ${index + 1}`;
+
+              return {
+                id: nombreReceta, 
+                name: nombreReceta,
+                ingredients: ingredients,
+                steps: 'null' 
+              };
+            })
+            .filter((r): r is Recipes => r !== null); 
+
+          setRecipes(listaProcesada);
+          setStatusMessage(""); 
+        } else {
+          setStatusMessage("Could not generate recipes. Try again later.");
+        }
       } catch (err) {
         console.error("Error creating recipes:", err);
-        setRecipe("An error occurred while fetching your recipes.");
+        setStatusMessage("An error occurred while fetching your recipes.");
       }
     };
+
     lookForRecipes();
-  }, [ingredients]); 
+  }, [ingredients, recipes.length]); 
 
   return (
     <div className="w-full flex flex-col gap-4 bg-gradient-to-b from-gray-50 to-white p-5 rounded-2xl shadow-md border border-gray-100">
@@ -35,35 +73,24 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
       </h2>
       
       <div className="flex flex-col gap-3 mb-2">
-        {recipe && recipe.trim() !== "" ? (
-          recipe.split(',').map((receta, index) => {
-            const recetaLimpia = receta.trim();
-            if (!recetaLimpia) return null;
+        {recipes.length > 0 ? (
+          recipes.map((currentRecipeObject, index) => {
+            const isBookmarked = bookmarkIds.includes(currentRecipeObject.id);
 
             return (
-              <div
+              <RecipeCard 
                 key={index}
-                onClick={() => onSelectRecipe(recetaLimpia)}
-                className="p-4 bg-red-900 rounded-xl border border-red-950/40 text-left cursor-pointer
-                          shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 hover:bg-[#2a1212]
-                          transition-all duration-200 transform hover:-translate-y-0.5 group"
-              >
-                <div className="flex justify-between items-center">
-                  <p className="font-bold text-red-100 text-base group-hover:text-white transition-colors">
-                    {recetaLimpia.split('\n')[0] || `Recipe ${index + 1}`}
-                  </p>
-                  <span className="text-red-400/50 group-hover:text-red-400 font-bold transition-colors text-sm">
-                    →
-                  </span>
-                </div>
-                <p className="text-xs text-red-200/40 mt-1">Tap to see full instructions</p>
-              </div>
-              );
-              })
-              ) : (
-              <p className="text-red-200/30 italic text-center py-4">No recipes text available</p>
-              )}
-          </div>
+                recipe={currentRecipeObject}
+                isBookmarked={isBookmarked}
+                onSelect={(r) => onSelectRecipe(r)}
+                onBookmarkToggle={(r) => toggleBookmark(r)} 
+              />
+            );
+          })
+        ) : (
+          <p className="text-gray-500 italic text-center py-4">{statusMessage}</p>
+        )}
       </div>
+    </div>
   );
 }
