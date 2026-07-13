@@ -1,7 +1,9 @@
 "use server";
 import { db } from "@/app/db/index"
 import { profiles } from "@/app/db/schema";
-import { createClient } from "@/app/db/server";
+import { createClient } from "@/app/db/server"; 
+import { User } from "@supabase/supabase-js";
+import { eq } from "drizzle-orm";
 
 export async function loginUser(email: string, password: string) {
   const supabase = await createClient();
@@ -12,16 +14,28 @@ export async function loginUser(email: string, password: string) {
   });
 
   if (error) {
-    return { success: false, error: error.message, user: true };
+    return { success: false, error: error.message, user: false };
   }
 
   return { success: true, error: null, user: data.user };
 }
 
+export async function signOut() {
+  const supabase = await createClient()
+  const {error} = await supabase.auth.signOut()
+
+  return {error}
+}
+
 export async function currentUser() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    return user
+    return {success: true, user: user}
+}
+
+export async function getUserMetadata(user: User) {
+  const metadata = await db.select().from(profiles).where(eq(profiles.id, user.id))
+  return metadata 
 }
 
 

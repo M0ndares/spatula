@@ -60,6 +60,30 @@
       "exportedName": "getBookmarksByUserId",
       "filename": "app/actions/bookmarksDb.ts"
     },
+    "60ad01e199417fb9fee0026af086b036e28703b182": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE3 => \"[project]/app/actions/recipesDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE4 => \"[project]/app/actions/bookmarksDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE5 => \"[project]/app/actions/userDb.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "deleteBookmark",
+          "filename": "app/actions/bookmarksDb.ts"
+        }
+      },
+      "exportedName": "deleteBookmark",
+      "filename": "app/actions/bookmarksDb.ts"
+    },
+    "604007e66dcb05b80127e24ed5e685edf18cefee64": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE3 => \"[project]/app/actions/recipesDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE4 => \"[project]/app/actions/bookmarksDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE5 => \"[project]/app/actions/userDb.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "createBookmark",
+          "filename": "app/actions/bookmarksDb.ts"
+        }
+      },
+      "exportedName": "createBookmark",
+      "filename": "app/actions/bookmarksDb.ts"
+    },
     "006f6f513f1b9e3a8dc4780e12ffaf421b8f7c3b93": {
       "workers": {
         "app/page": {
@@ -94,6 +118,30 @@
         }
       },
       "exportedName": "loginUser",
+      "filename": "app/actions/userDb.ts"
+    },
+    "002eaa95b72742438ac0c14ed5b6eb01c0b8362aa6": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE3 => \"[project]/app/actions/recipesDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE4 => \"[project]/app/actions/bookmarksDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE5 => \"[project]/app/actions/userDb.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "signOut",
+          "filename": "app/actions/userDb.ts"
+        }
+      },
+      "exportedName": "signOut",
+      "filename": "app/actions/userDb.ts"
+    },
+    "405b344cf331845dc3d6a3d4b267fa59da816af911": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions/ingredients.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/recipe.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/app/actions/info.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE3 => \"[project]/app/actions/recipesDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE4 => \"[project]/app/actions/bookmarksDb.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE5 => \"[project]/app/actions/userDb.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getUserMetadata",
+          "filename": "app/actions/userDb.ts"
+        }
+      },
+      "exportedName": "getUserMetadata",
       "filename": "app/actions/userDb.ts"
     }
   },

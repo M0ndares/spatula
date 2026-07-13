@@ -3,7 +3,8 @@ import { pgTable, uuid, text, timestamp, boolean } from "drizzle-orm/pg-core";
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
   name: text("name").notNull(),
-  isActive: boolean("isActive").notNull()
+  isActive: boolean("isActive").notNull(),
+  bio: text("bio")
 });
 
 export const recipes = pgTable("recipes", {
