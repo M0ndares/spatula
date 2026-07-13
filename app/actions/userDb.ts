@@ -30,7 +30,8 @@ export async function signOut() {
 export async function currentUser() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    return {success: true, user: user}
+    if(user) return {success: true, user: user}
+    return {success: false, user: false}
 }
 
 export async function getUserMetadata(user: User) {
@@ -54,6 +55,7 @@ export async function registerUser(email: string, password: string, username: st
         id: data.user.id,
         name: username, 
         isActive: false,
+        category: 'Spatula master'
       })
   }
 

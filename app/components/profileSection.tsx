@@ -5,14 +5,17 @@ import { fonts } from "../actions/fonts";
 import { currentUser } from "../actions/userDb";
 import type { User } from "@supabase/supabase-js";
 import { registerUser, loginUser, signOut, getUserMetadata } from "../actions/userDb";
-import { metadata } from "../layout";
 
 interface Profile {
   id: string;
   name: string;
   isActive: boolean;
   bio: string | null;
+  category: string;
 }
+export function isSupabaseUser(value: any): value is User {
+    return value !== null && typeof value === "object" && "id" in value && "email" in value;
+  }
 
 export default function ProfileSection() {
   const [user, setUser] = useState<User | null>(null);
@@ -23,9 +26,6 @@ export default function ProfileSection() {
   const [username, setUsername] = useState(""); 
   const [currentError, setCurrentError] = useState<string | null>(null);
 
-  function isSupabaseUser(value: any): value is User {
-    return value !== null && typeof value === "object" && "id" in value && "email" in value;
-  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -65,24 +65,30 @@ export default function ProfileSection() {
   };
 
   useEffect(() => {
-    async function fetchUserAndBookmarks() {
-      try {
-        const loggedUser = await currentUser();
-        if (isSupabaseUser(loggedUser)) {
-          setUser(loggedUser); 
-          const metadata = await getUserMetadata(loggedUser);
-          if (metadata) {
-            setUserMetadata(Array.isArray(metadata) ? metadata[0] : metadata);
-          }
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Error cargando usuario:", error);
-      } 
+
+    async function fetchMetadata(supabaseUser: User) {
+    try {
+      const metadata = await getUserMetadata(supabaseUser);
+      if (metadata && Array.isArray(metadata) && metadata.length > 0) {
+        setUserMetadata(metadata[0]);
+      }
+    } catch (error) {
+      console.error("Error cargando metadatos:", error);
     }
-    fetchUserAndBookmarks();
-  }, []);
+  }
+
+  async function checkInitialUser() {
+    const loggedUser = await currentUser();
+    if (isSupabaseUser(loggedUser)) {
+      setUser(loggedUser);
+      await fetchMetadata(loggedUser);
+    } else {
+      setUser(null);
+    }
+  }
+  checkInitialUser();
+  
+}, []);
 
   return (
     <div>
@@ -250,11 +256,11 @@ export default function ProfileSection() {
 
             <div className="flex flex-col justify-center">
               <h3 className="text-2xl font-light text-[#2a1212] font-serif tracking-wide leading-tight">
-                {user.email}
+                {userMetadata?.name.split(' ')[0]}
               </h3>
               <div className="mt-1">
                 <span className="inline-block px-2.5 py-0.5 bg-red-950/80 border border-red-900/30 rounded-full text-[9px] uppercase tracking-widest text-red-300 font-semibold">
-                  {userMetadata?.name}
+                  {userMetadata?.category}
                 </span>
               </div>
             </div>

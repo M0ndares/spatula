@@ -4,7 +4,8 @@ export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(),
   name: text("name").notNull(),
   isActive: boolean("isActive").notNull(),
-  bio: text("bio")
+  bio: text("bio"),
+  category: text("category").notNull()
 });
 
 export const recipes = pgTable("recipes", {

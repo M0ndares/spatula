@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { fonts } from "../actions/fonts";
 import { getBookmarksByUserId } from "../actions/bookmarksDb";
 import { currentUser } from "../actions/userDb";
+import { isSupabaseUser } from "./profileSection";
 
 interface BookmarksSectionProps {
   onSelectRecipe: (receta: string) => void;
@@ -12,22 +13,29 @@ export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionPro
   const [currentBookmarks, setCurrentBookmarks] = useState<string[]>([])
   
   useEffect(() => {
-    async function fetchUserAndBookmarks() {
-      try {
-        const user = await currentUser();
-        if (user) {
-          const bookmarksData = await getBookmarksByUserId(user.id);
-          const recipeIds = bookmarksData.map((item) => item.recipeId);
-          
-          setCurrentBookmarks(recipeIds);
+      async function loadPageData() {
+        try {
+          const userResponse = await currentUser();
+  
+          if (userResponse && userResponse.success && userResponse.user) {
+            const loggedUser = userResponse.user; 
+            if(!isSupabaseUser(loggedUser)) return
+            const userBookmarks = await getBookmarksByUserId(loggedUser.id)
+              
+            if (userBookmarks && Array.isArray(userBookmarks)) {
+              const ids = userBookmarks.map((b: any) => b.recipeId); 
+              setCurrentBookmarks(ids); 
+            }
+          } else {
+            setCurrentBookmarks([]);
+          }
+        } catch (error) {
+          console.error("Error cargando los datos de la página:", error);
         }
-      } catch (error) {
-        console.error("Error cargando marcadores:", error);
-      } 
-    }
-
-    fetchUserAndBookmarks();
-  }, []);
+      }
+  
+      loadPageData();
+    }, []);
 
   return (
     <div>
