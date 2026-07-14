@@ -17,7 +17,9 @@ export async function infoRecipe(recipe: string, ingredients: string) {
             Requirements:
             - Focus on professional flavor profiles but keep the execution doable at home.
             - Separate every step with a line break.
-            - Explain every single step using ordinal numbers and DON'T SAY ANYTHING MORE.`},
+            - Explain every single step using ordinal numbers.
+            - After the last step, write '&&' followed by the ingridients needed, remember you don't have to use all the ingridients list. 
+            - DON'T SAY ANYTHING MORE.`},
           ],
         },
       ],

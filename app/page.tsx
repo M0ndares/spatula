@@ -9,6 +9,7 @@ import NavigationBar from "./components/navigationBar";
 import MenuSpatula from "./components/menuSpatula";
 import BookmarksSection from "./components/bookmarksSection";
 import ProfileSection from "./components/profileSection";
+ 
 
 interface Recipes {
   name: string;
@@ -40,9 +41,9 @@ export default function Spatula() {
   };
 
   return (
+   
     <main className="p-1 max-w-md mx-auto bg-gray-50 min-h-screen">
       <NavigationBar currentTab={currentTab} onNavigate={toNav}></NavigationBar>
-      
       {currentTab === 'menu' && (
         <section className="mt-4 pt-4">
           <MenuSpatula></MenuSpatula>
@@ -50,6 +51,7 @@ export default function Spatula() {
       )}
       
       {currentTab === 'recipes' && (
+
         <section className="mt-4 pt-4">
           {!photo && (
             <div className="flex flex-col items-center">
@@ -100,8 +102,9 @@ export default function Spatula() {
             <div className="flex flex-col items-center">
               <InfoRecipe 
                 ingredients={ingredients} 
-                currentRecipe={currentRecipe.name} 
-                recipeId={currentRecipe.id} 
+                name={currentRecipe.name} 
+                steps={currentRecipe.steps} 
+                id={currentRecipe.id}
               />
               
               <button 
@@ -119,16 +122,16 @@ export default function Spatula() {
             </div>
           )}
         </section>
+        
       )}
 
       {currentTab === 'bookmarks' && (
         <section className="mt-4 pt-4">
-          {/* 5. Modificamos la navegación y corregimos el callback para mandar el objeto completo y saltar a la pestaña */}
           <BookmarksSection 
             onSelectRecipe={(recetaObj: Recipes) => {
               setCurrentRecipe(recetaObj);
-              setCurrentTab('recipes'); // Te lleva a la pestaña de recetas para poder ver el InfoRecipe
-              setPhoto("true"); // Marcador visual dummy para simular que hay flujo activo y renderizar InfoRecipe
+              setCurrentTab('recipes'); 
+              setPhoto("true"); 
               setMostrarRecetas(true);
             }}
           />

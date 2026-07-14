@@ -1,31 +1,35 @@
 "use client";
+
 import { useState, useEffect } from 'react';
 import { infoRecipe } from '../actions/info';
 import { currentUser } from '../actions/userDb';
 import { getBookmarksByUserId, createBookmark, deleteBookmark } from '../actions/bookmarksDb';
 import type { User } from "@supabase/supabase-js";
+import { getRecipeByName } from '../actions/recipesDb';
 
-interface InfoRecipeProps {
-  ingredients: string; 
-  currentRecipe: string; 
-  recipeId: string;      
+interface Recipe {
+  id: string;
+  name: string;
+  ingredients: string;
+  steps: string;
 }
 
-export default function InfoRecipe({ ingredients, currentRecipe, recipeId } : InfoRecipeProps) {
-  const [recipeInfo, setRecipeInfo] = useState<string>("Generating delicious recipes for you...");
+export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
+  // Ajustamos el tipo para que acepte null si no hay datos o está cargando
+  const [recipeInfo, setRecipeInfo] = useState<Recipe | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function checkUserAndBookmarks() {
       try {
-        const {success, user} = await currentUser();
+        const { success, user } = await currentUser();
         if (success && user) {
           setUser(user);
           const userBookmarks = await getBookmarksByUserId(user.id);
           if (userBookmarks && Array.isArray(userBookmarks)) {
-            // Verificamos si la receta actual está en sus marcadores
-            const exists = userBookmarks.some((b: any) => b.id === recipeId);
+            const exists = userBookmarks.some((b: any) => b.id === id);
             setIsBookmarked(exists);
           }
         }
@@ -34,65 +38,109 @@ export default function InfoRecipe({ ingredients, currentRecipe, recipeId } : In
       }
     }
     checkUserAndBookmarks();
-  }, [recipeId]); 
+  }, [id]);
 
   useEffect(() => {
     const lookForRecipes = async () => {
       if (!ingredients || ingredients === 'No ingredients identified') {
-        setRecipeInfo("No valid ingredients found to generate a recipe.");
+        setRecipeInfo(null);
+        setIsLoading(false);
         return;
       }
 
       try {
-        const resultadoRecetas = await infoRecipe(currentRecipe, ingredients);
-        if (resultadoRecetas) {
-          setRecipeInfo(resultadoRecetas);
+        setIsLoading(true);
+        const exists = await getRecipeByName(name);
+        
+        if (exists.length === 0) {
+          const resultadoRecetas = await infoRecipe(name, ingredients);
+          if (resultadoRecetas) {
+            const receta: Recipe = {
+              id: id || name, 
+              name: name,
+              ingredients: ingredients,
+              steps: resultadoRecetas,
+            };
+
+            setRecipeInfo(receta);
+          }
         } else {
-          setRecipeInfo("No recipes identified.");
+          setRecipeInfo(exists[0]);
         }
       } catch (err) {
         console.error("Error creating recipes:", err);
-        setRecipeInfo("An error occurred while fetching your recipes.");
+        setRecipeInfo(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     lookForRecipes();
-  }, [ingredients, currentRecipe]); 
+  }, [ingredients, name, id]);
 
-  // 3. Manejador para el botón de favorito (Estado optimista)
   async function toggleBookmark() {
-    if (!user || !recipeId) return;
+    if (!user || !id) return;
 
     if (isBookmarked) {
-      setIsBookmarked(false); // Cambia en la UI al instante
-      await deleteBookmark(user.id, recipeId);
+      setIsBookmarked(false);
+      await deleteBookmark(user.id, id);
     } else {
-      setIsBookmarked(true);  // Cambia en la UI al instante
-      await createBookmark(user.id, recipeId);
+      setIsBookmarked(true);
+      await createBookmark(user.id, id);
     }
   }
 
   return (
     <div className="w-full flex flex-col gap-4">
-      {recipeInfo && (
-        <div className="bg-red-950/20 p-6 rounded-lg shadow-sm border text-red-950 w-full prose relative group">
+      {isLoading ? (
+        <div className="text-center py-8 text-red-900 font-medium animate-pulse">
+          Cooking your recipe details...
+        </div>
+      ) : recipeInfo ? (
+        <div className="bg-gradient-to-b from-red-50/50 to-white p-6 md:p-8 rounded-2xl shadow-md border border-red-100/80 text-red-950 w-full relative group transition-all duration-300">
           
           {user && (
-            <button 
+            <button
               onClick={toggleBookmark}
-              className="absolute top-6 right-6 p-2 rounded-full hover:bg-red-950/10 transition-colors duration-200"
+              className="absolute top-6 right-6 p-2 rounded-full bg-white shadow-sm border border-red-100 hover:bg-red-50 hover:scale-105 active:scale-95 transition-all duration-200 z-10"
               title={isBookmarked ? "Remove from bookmarks" : "Save to bookmarks"}
             >
-              <span className={`material-symbols-outlined select-none text-2xl ${
-                isBookmarked ? "text-red-600 fill-current" : "text-red-950 hover:text-red-700"
+              <span className={`material-symbols-outlined select-none text-2xl flex items-center justify-center ${
+                isBookmarked ? "text-red-600 fill-current" : "text-red-900 hover:text-red-700"
               }`}>
                 {isBookmarked ? "bookmark_added" : "bookmark"}
               </span>
             </button>
           )}
 
-          <h2 className="text-2xl text-red-900 font-bold mb-4 border-b pb-2 pr-12">{currentRecipe}</h2>
-          <p className="whitespace-pre-line text-base leading-relaxed">{recipeInfo}</p>
+          <h2 className="text-2xl md:text-3xl text-red-900 font-extrabold mb-6 border-b-2 border-red-100 pb-4 pr-14 leading-tight">
+            {recipeInfo.name}
+          </h2>
+
+          <div className="mb-6 bg-red-950/[0.02] p-4 rounded-xl border border-red-900/5">
+            <h3 className="text-lg text-red-900 font-bold mb-2 flex items-center gap-2">
+              <span className="material-symbols-outlined text-xl select-none">shopping_basket</span>
+              Required Ingredients
+            </h3>
+            <p className="text-red-950/80 text-sm md:text-base leading-relaxed whitespace-pre-line pl-1">
+              {recipeInfo.ingredients}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg text-red-900 font-bold mb-2 flex items-center gap-2">
+              <span className="material-symbols-outlined text-xl select-none">restaurant_menu</span>
+              Preparation Steps
+            </h3>
+            <p className="whitespace-pre-line text-sm md:text-base leading-relaxed text-red-950/90 pl-1">
+              {recipeInfo.steps}
+            </p>
+          </div>
+
+        </div>
+      ) : (
+        <div className="text-center py-6 text-red-900/40 italic bg-red-50/20 rounded-xl border border-dashed border-red-200">
+          No recipe information available.
         </div>
       )}
     </div>
