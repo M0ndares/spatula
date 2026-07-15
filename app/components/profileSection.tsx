@@ -105,7 +105,7 @@ export default function ProfileSection() {
     return (
       <div>
         <h1 className={`text-5xl sm:text-6xl text-center font-light tracking-tight font-serif ${fonts()}`}>
-          <span className="font-serif italic duration-500 transform">Profile</span>
+          <span className="font-serif italic duration-500 transform">profile</span>
         </h1>
         <p className="text-center text-gray-400 text-sm mt-10">Loading profile data...</p>
       </div>
@@ -113,14 +113,17 @@ export default function ProfileSection() {
   }
 
   return (
-    <div>
+    <div className="px-2">
       <h1 className={`text-5xl sm:text-6xl text-center font-light tracking-tight font-serif ${fonts()}`}>
-        <span className={`font-serif italic duration-500 transform`}>Profile</span>
+        <span className={`font-serif italic duration-500 transform`}>profile</span>
       </h1>
+      <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block pt-8 text-center">
+          𐂐𓇋  welcome to spatula  
+        </span>
       <br />
 
       {!user && !isSigningUp && (
-        <div>
+        <div> 
           <div className="w-full max-w-md mx-auto p-6 bg-red-950/20 rounded-2xl border border-red-950/40 backdrop-blur-sm shadow-xl">
             <h2 className="text-3xl font-light text-center text-red-900 font-serif mb-6">
               Sign in

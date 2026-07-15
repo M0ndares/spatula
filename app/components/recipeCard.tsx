@@ -34,8 +34,8 @@ export default function RecipeCard({
         <span 
           className={`material-symbols-outlined cursor-pointer transition-colors ${
             isBookmarked 
-              ? "text-red-600 group-hover:text-red-400" 
-              : "text-red-950 group-hover:text-white hover:text-red-800"
+              ? "text-red-950 group-hover:text-white hover:text-red-700" 
+              : "text-gray-400 group-hover:text-white hover:text-red-700"
           }`}
           onClick={(e) => {
             e.stopPropagation(); 

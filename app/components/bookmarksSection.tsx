@@ -52,9 +52,11 @@ export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionPro
   return (
     <div className="max-w-xl mx-auto p-4">
       <h1 className={`font-serif italic duration-500 transform text-5xl sm:text-6xl text-center ${fonts()}`}>
-        Bookmarks
+        bookmarks
       </h1>
-      
+      <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block mt-6 text-center">
+          𐂐𓇋  save your favorite recipes  
+        </span>
       <div className="mt-8">
         {isLoading ? (
           <p className="text-center text-red-900/60 text-sm animate-pulse">

@@ -45,11 +45,12 @@ export default function CameraScanner({ onCapturedPhoto }: CamaraScannerProps) {
   return (
     <div className="flex flex-col items-center">
       <h1 className={`text-5xl sm:text-6xl text-center font-light tracking-tight font-serif ${fonts()}`}>
-            <span className={`font-serif italic duration-500 transform`}>Recipes</span>
+            <span className={`font-serif italic duration-500 transform`}>recipes</span>
       </h1>
       <br></br>
-      <p className="text-gray-500 text-center">
-          Take a photo of your ingredients.</p>
+      <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block">
+          𐂐𓇋  capture your ingredients  
+        </span>
       <div className="flex justify-center my-4">
         <video ref={videoRef} autoPlay playsInline width="350" height="200" className="rounded-lg shadow-md"></video>
       </div>

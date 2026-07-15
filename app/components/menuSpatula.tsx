@@ -48,10 +48,10 @@ export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
     <section>
       <div className="max-w-xl text-center space-y-8 mx-auto p-4">
         <h1 className="text-5xl sm:text-6xl font-light tracking-tight text-red-900 font-serif">
-          Let's <span className={`font-serif italic duration-500 transform ${fonts()}`}>cook</span> it.
+          <span className={`font-serif italic duration-500 transform ${fonts()}`}>spatula</span> 
         </h1>
         <span className="text-xs uppercase tracking-[0.3em] text-gray-400 font-semibold block">
-          -- trending: summer '26 --
+          𐂐𓇋 trending recipes for you 
         </span>
 
         <div className="space-y-4 mt-6">

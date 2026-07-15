@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 export function fonts() {
     const fuentes = [
-        "font-serif italic text-gray-400 ",         
-        "font-mono tracking-widest text-gray-400 ", 
+        "font-serif italic text-red-900 ",         
+        "font-mono tracking-widest text-red-900 ", 
         "font-mono italic text-[#2a1212]",                  
         "font-mono tracking-widest text-[#2a1212]",  
       ];
