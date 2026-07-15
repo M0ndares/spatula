@@ -41,9 +41,8 @@ export default function Spatula() {
   };
 
   return (
-   
-      <main className="p-1 max-w-md mx-auto bg-gray-50 min-h-screen">
-        <NavigationBar currentTab={currentTab} onNavigate={toNav}></NavigationBar>
+  <main className="w-full max-w-sm mx-auto bg-gray-50 min-h-screen pt-0 px-0 pb-6">
+   <NavigationBar currentTab={currentTab} onNavigate={toNav}></NavigationBar>
 
         {currentRecipe ? (
           <div className="mt-4">
