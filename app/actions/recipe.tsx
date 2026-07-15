@@ -16,7 +16,8 @@ export async function createRecipes(ingredients: string) {
             Requirements:
             - Don't create a recipe that includes any other ingredient not presented previously.
             - Format the output as a comma-separated list of recipes where each recipe includes its name.
-            - Separate each recipe ONLY with a comma (,)
+            - Separate each recipe ONLY with a comma (,).
+            - Names of recipes should be concise.
             - Don't return ANYTHING more than that`},
           ],
         },

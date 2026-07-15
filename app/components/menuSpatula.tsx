@@ -13,7 +13,10 @@ interface Recipe {
   ingredients: string;
 }
 
-export default function MenuSpatula() {
+interface MenuSpatulaProps {
+  onSelectRecipe: (recipe: Recipe) => void;
+}
+export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
   const topRecipes = [
     '2bafe6b2-fedf-47dd-9562-fdf278fbea84', 
     'b8558334-39e5-4837-809a-894c6dd03643', 
@@ -21,7 +24,6 @@ export default function MenuSpatula() {
   ];
   
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [selectedRecipe, setselectedRecipe] = useState<Recipe | null>(null);
   const { bookmarkIds, toggleBookmark } = useBookmarks();
 
   useEffect(() => {
@@ -52,12 +54,6 @@ export default function MenuSpatula() {
           -- trending: summer '26 --
         </span>
 
-        {selectedRecipe && (
-          <p className="text-sm text-green-700 bg-green-100 p-2 rounded-lg inline-block">
-            Receta seleccionada: <strong>{selectedRecipe.name}</strong>
-          </p>
-        )}
-
         <div className="space-y-4 mt-6">
           {recipes && recipes.map((recipe) => {
             const isBookmarked = bookmarkIds.includes(recipe.id);
@@ -66,8 +62,8 @@ export default function MenuSpatula() {
                 key={recipe.id} 
                 recipe={recipe} 
                 isBookmarked={isBookmarked} 
-                onSelect={(r) => setselectedRecipe(r)} 
-                onBookmarkToggle={(r) => toggleBookmark(r)} 
+                onSelect={() => onSelectRecipe(recipe)} 
+                onBookmarkToggle={(r) => toggleBookmark(r as Recipe)} 
               />
             );
           })}

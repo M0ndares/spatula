@@ -54,12 +54,13 @@ export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
         
         if (exists.length === 0) {
           const resultadoRecetas = await infoRecipe(name, ingredients);
-          if (resultadoRecetas) {
+          const toSplit = resultadoRecetas?.split('&&')
+          if (toSplit && resultadoRecetas) {
             const receta: Recipe = {
               id: id || name, 
               name: name,
-              ingredients: ingredients,
-              steps: resultadoRecetas,
+              ingredients: toSplit[1],
+              steps: toSplit[0],
             };
 
             setRecipeInfo(receta);
@@ -136,7 +137,6 @@ export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
               {recipeInfo.steps}
             </p>
           </div>
-
         </div>
       ) : (
         <div className="text-center py-6 text-red-900/40 italic bg-red-50/20 rounded-xl border border-dashed border-red-200">
