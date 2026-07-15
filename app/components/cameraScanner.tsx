@@ -13,7 +13,7 @@ export default function CameraScanner({ onCapturedPhoto }: CamaraScannerProps) {
   useEffect(() => {
     let streamActual: MediaStream | null = null;
 
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: {ideal: "environment"} } })
     
       .then((stream) => {
         streamActual = stream;

@@ -134,7 +134,7 @@ export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
               Preparation Steps
             </h3>
             <p className="whitespace-pre-line text-sm md:text-base leading-relaxed text-red-950/90 pl-1">
-              {recipeInfo.steps}
+              {recipeInfo.steps.replaceAll('\\n', '\n')}
             </p>
           </div>
         </div>
