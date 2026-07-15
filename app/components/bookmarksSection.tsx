@@ -50,7 +50,7 @@ export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionPro
   }, [bookmarkIds]);
 
   return (
-    <div className="max-w-xl mx-auto p-4">
+    <div className="max-w-xl mx-auto">
       <h1 className={`font-serif italic duration-500 transform text-5xl sm:text-6xl text-center ${fonts()}`}>
         bookmarks
       </h1>

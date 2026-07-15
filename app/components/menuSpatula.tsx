@@ -46,7 +46,7 @@ export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
 
   return (
     <section>
-      <div className="max-w-xl text-center space-y-8 mx-auto p-4">
+      <div className="max-w-xl text-center space-y-8 mx-auto">
         <h1 className="text-5xl sm:text-6xl font-light tracking-tight text-red-900 font-serif">
           <span className={`font-serif italic duration-500 transform ${fonts()}`}>spatula</span> 
         </h1>
