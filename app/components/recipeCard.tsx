@@ -22,7 +22,7 @@ export default function RecipeCard({
   return (
     <div
       onClick={() => onSelect(recipe)}
-      className="p-4 bg-red-950/20 rounded-xl border border-red-950/40 text-left cursor-pointer
+      className="p-4 m-2 px-5 bg-red-950/20 rounded-xl border border-red-950/40 text-left cursor-pointer
                  shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 hover:bg-[#2a1212]
                  transition-all duration-200 transform hover:-translate-y-0.5 group"
     >

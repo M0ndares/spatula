@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/app/db/index"
 import { bookmarks } from "@/app/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, count } from "drizzle-orm";
 import { recipes } from "@/app/db/schema";
 
 export async function getBookmarksByUserId(userId: string) {
@@ -18,7 +18,7 @@ export async function getBookmarksByUserId(userId: string) {
 }
 
 export async function countBookmarksById(userId: string) {
-  return await db.select().from(bookmarks).where(eq(bookmarks.id, userId))
+  return await db.select({ value: count() }).from(bookmarks).where(eq(bookmarks.userId, userId))
 }
 
 export async function createBookmark(userId: string, recipeId: string) {

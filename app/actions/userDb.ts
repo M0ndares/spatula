@@ -61,3 +61,9 @@ export async function registerUser(email: string, password: string, username: st
 
   return { success: true, error: null };
 }
+
+export async function modifyUserBio(userId: string, bio: string) {
+  const returning = await db.update(profiles).set({ bio: bio }).where(eq(profiles.id, userId))
+  if(returning) return {success: true}
+  return {success: false}
+}

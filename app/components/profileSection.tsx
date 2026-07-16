@@ -4,7 +4,9 @@ import { useEffect, useState } from "react"
 import { fonts } from "../actions/fonts";
 import { currentUser } from "../actions/userDb";
 import type { User } from "@supabase/supabase-js";
-import { registerUser, loginUser, signOut, getUserMetadata } from "../actions/userDb";
+import { registerUser, loginUser, signOut, getUserMetadata, modifyUserBio } from "../actions/userDb";
+import { countBookmarksById } from "../actions/bookmarksDb";
+import EditableBio from "./bioSection";
 
 interface Profile {
   id: string;
@@ -13,6 +15,7 @@ interface Profile {
   bio: string | null;
   category: string;
 }
+
 
 export function isSupabaseUser(value: any): value is User {
   return value !== null && typeof value === "object" && "id" in value && "email" in value;
@@ -27,6 +30,16 @@ export default function ProfileSection() {
   const [username, setUsername] = useState(""); 
   const [currentError, setCurrentError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [userBookmarks, setUserBookmarks] = useState<number | null>(null)
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [bioText, setBioText] = useState(userMetadata?.bio || "No bio added yet.");
+
+  const handleSaveBio = async (newBio: string) => {
+    const {success, user} = await currentUser()
+    if(!user) return
+    const state = await modifyUserBio(user.id, newBio)
+    if(state) setUserMetadata(prev => prev ? { ...prev, bio: newBio } : null);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,13 +71,18 @@ export default function ProfileSection() {
         }
 
         setUser(loggedUser);
+        const currentUserBookmarks = await countBookmarksById(loggedUser.id)
+        if(currentUserBookmarks) setUserBookmarks(currentUserBookmarks[0].value)
+        console.log(currentUserBookmarks)
+
         const metadata = await getUserMetadata(loggedUser);
-        
         if (metadata && Array.isArray(metadata) && metadata.length > 0) {
           setUserMetadata(metadata[0]);
         } else if (metadata && !Array.isArray(metadata)) {
           setUserMetadata(metadata as Profile);
         }
+        
+
         setCurrentError(null);
       } catch (err) {
         console.error(err);
@@ -81,7 +99,10 @@ export default function ProfileSection() {
         console.log()
         if (isSupabaseUser(user)) {
           setUser(user);
-          
+          const currentUserBookmarks = await countBookmarksById(user.id)
+          if(currentUserBookmarks) setUserBookmarks(currentUserBookmarks[0].value)
+          console.log(currentUserBookmarks)
+
           const metadata = await getUserMetadata(user);
           if (metadata && Array.isArray(metadata) && metadata.length > 0) {
             setUserMetadata(metadata[0]);
@@ -294,11 +315,11 @@ export default function ProfileSection() {
 
           <div className="grid grid-cols-2 gap-4 mb-5 bg-red-950/20 p-3 rounded-xl border border-red-950/20">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-red-900">Bookmarks</p>
-              <p className="text-xl font-semibold text-[#2a1212] font-serif">12</p>
+              <p className="text-[10px] uppercase tracking-wider text-red-800">Bookmarks</p>
+              <p className="text-xl font-semibold text-[#2a1212] font-serif">{userBookmarks}</p>
             </div>
             <div className="border-l border-red-950/40 pl-4">
-              <p className="text-[10px] uppercase tracking-wider text-red-900">Cooking since</p>
+              <p className="text-[10px] uppercase tracking-wider text-red-800">Cooking since</p>
               <p className="text-xl font-semibold text-[#2a1212] font-serif">
                 {user.created_at ? user.created_at.substring(0, 10) : "N/A"}
               </p>
@@ -307,21 +328,16 @@ export default function ProfileSection() {
 
           <div className="space-y-3.5 text-left mb-6">
             <div>
-              <label className="block text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1 ml-1">
+              <label className="block text-[10px] uppercase tracking-wider text-red-800 font-semibold mb-1 ml-1">
                 Email Address
               </label>
-              <div className="w-full p-2.5 bg-red-950/20 border border-red-950/20 rounded-xl text-red-900 text-sm font-mono">
+              <div className="w-full p-2.5 bg-red-950/20 border border-red-950/20 rounded-xl text-[#2a1212] text-sm font-mono">
                 {user.email}
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1 ml-1">
-                Bio 
-              </label>
-              <p className="w-full p-2.5 bg-red-950/20 border border-red-950/20 rounded-xl text-red-900 text-xs italic leading-relaxed">
-                {userMetadata?.bio || "No bio added yet."}
-              </p>
+              <EditableBio initialBio={userMetadata?.bio || ""} onSave={handleSaveBio}></EditableBio>
             </div>
           </div>
           
@@ -330,6 +346,7 @@ export default function ProfileSection() {
               await signOut();         
               setUser(null);
               setUserMetadata(null);
+              setUserBookmarks(null);
             }}
             className="w-full p-3.5 mt-2 bg-red-900 hover:bg-[#2a1212] border border-red-950/40 text-red-100 font-bold rounded-xl shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 transition-all duration-200 transform active:translate-y-0.5 disabled:opacity-50 disabled:transform-none text-sm cursor-pointer"
           >
