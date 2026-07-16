@@ -30,7 +30,9 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
         setStatusMessage("No valid ingredients found to generate a recipe.");
         return;
       }
-      
+
+      if(recipes.length == 0) return
+
       try {
         const resultadoRecetas = await createRecipes(ingredients);
         
