@@ -15,23 +15,30 @@ interface Recipes {
 interface RecipeMakerProps {
   ingredients: string; 
   onSelectRecipe: (receta: Recipes) => void; 
+  existingRecipes?: Recipes[] | null;
+  onCreateRecipe: (recipes: Recipes[]) => void;
 }
 
-export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMakerProps) {
-  const [statusMessage, setStatusMessage] = useState<string>("Generating delicious recipes for you...");
-  const [recipes, setRecipes] = useState<Recipes[]>([]);  
+export default function RecipeMaker({ 
+  ingredients, 
+  onSelectRecipe, 
+  existingRecipes = null, 
+  onCreateRecipe 
+}: RecipeMakerProps) {
+  const [localRecipes, setLocalRecipes] = useState<Recipes[]>(existingRecipes || []);
+  const [statusMessage, setStatusMessage] = useState<string>(
+    existingRecipes && existingRecipes.length > 0 ? "" : "Generating delicious recipes for you..."
+  );
   const { bookmarkIds, toggleBookmark } = useBookmarks();
 
   useEffect(() => {
-    if (recipes.length > 0) return;
+    if (localRecipes.length > 0) return;
 
     const lookForRecipes = async () => {
       if (!ingredients || ingredients === 'No ingredients identified.') {
         setStatusMessage("No valid ingredients found to generate a recipe.");
         return;
       }
-
-      if(recipes.length != 0) return
 
       try {
         const resultadoRecetas = await createRecipes(ingredients);
@@ -54,7 +61,8 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
             })
             .filter((r): r is Recipes => r !== null); 
 
-          setRecipes(listaProcesada);
+          setLocalRecipes(listaProcesada);
+          onCreateRecipe(listaProcesada);
           setStatusMessage(""); 
         } else {
           setStatusMessage("Could not generate recipes. Try again later.");
@@ -66,7 +74,7 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
     };
 
     lookForRecipes();
-  }, [ingredients, recipes.length]); 
+  }, [ingredients, localRecipes.length, onCreateRecipe]); 
 
   return (
     <div className="w-full flex flex-col gap-4 bg-gradient-to-b from-gray-50 to-white p-5 rounded-2xl shadow-md border border-gray-100">
@@ -75,8 +83,8 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
       </h2>
       
       <div className="flex flex-col gap-3 mb-2">
-        {recipes.length > 0 ? (
-          recipes.map((currentRecipeObject, index) => {
+        {localRecipes.length > 0 ? (
+          localRecipes.map((currentRecipeObject, index) => {
             const isBookmarked = bookmarkIds.includes(currentRecipeObject.id);
 
             return (

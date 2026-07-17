@@ -15,7 +15,6 @@ export async function infoRecipe(recipe: string, ingredients: string) {
             Your task is to look at this list of ingredients: "${ingredients}", and explain the steps needed to cook this recipe: ${recipe}. 
 
             Requirements:
-            - Focus on professional flavor profiles but keep the execution doable at home.
             - Every step should be presented in its own line.
             - Explain every single step using ordinal numbers.
             - You don't have to use all the ingredients list
