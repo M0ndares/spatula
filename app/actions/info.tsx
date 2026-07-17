@@ -18,9 +18,9 @@ export async function infoRecipe(recipe: string, ingredients: string) {
             - Focus on professional flavor profiles but keep the execution doable at home.
             - Every step should be presented in its own line.
             - Explain every single step using ordinal numbers.
-            - After the last step, write '&&' followed by the ingridients needed for this recipe separated by a line break. 
-            - IMPORTANT you don't have to use all the ingridients list, but they must be in the list. 
-            - IMPORTANT the quantities presented in the ingredients zone can't be greater than the available ingredients.
+            - You don't have to use all the ingredients list
+            - The quantities can't be greater than the available ingredients.
+            - After the last step, write '&&' followed by the ingredients needed for this recipe separated by a line break. Remember, you don't have to use all the ingredients list.
             - DON'T SAY ANYTHING MORE.`},
           ],
         },
