@@ -31,7 +31,7 @@ export default function RecipeMaker({ ingredients, onSelectRecipe }: RecipeMaker
         return;
       }
 
-      if(recipes.length == 0) return
+      if(recipes.length != 0) return
 
       try {
         const resultadoRecetas = await createRecipes(ingredients);

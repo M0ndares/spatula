@@ -14,7 +14,7 @@ export async function obtenerIngredientes(fotoUrl: string) {
           role: "user",
           content: [
             { type: "text", text: `Identify the ingredients in this image and their approximate culinary amounts. " +
-              "For countable ingridients (like avocado, apples, plums) you may return a number." +
+              "For countable ingridients (like avocado, prickly pears, pitayas) you may return a number." +
               "For uncountable ingredients (like rice, flour, sugar, water), DO NOT return just a number. " +
               "Instead, use visual estimates like '1 cup of rice', 'a handful of spinach', '1 bowl', 'half a package'. " +
               "Return the results as a comma-separated list. Example: 2 tomatoes, 1 cup of rice, a handful of cilantro, '1 pear', '3 pineapples'. +
