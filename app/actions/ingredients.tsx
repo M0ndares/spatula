@@ -13,7 +13,7 @@ export async function obtenerIngredientes(fotoUrl: string) {
         {
           role: "user",
           content: [
-            { type: "text", text: `Identify the ingredients in this image and their approximate culinary amounts. " +
+            { type: "text", text: `Analize multiple times the textures of the ingredients in this image, so that you can correctly identify them, as well as their approximate culinary amounts. " +
               "For countable ingridients (like avocado, prickly pears, pitayas) you may return a number." +
               "For uncountable ingredients (like rice, flour, sugar, water), DO NOT return just a number. " +
               "Instead, use visual estimates like '1 cup of rice', 'a handful of spinach', '1 bowl', 'half a package'. " +
