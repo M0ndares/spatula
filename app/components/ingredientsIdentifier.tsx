@@ -30,7 +30,7 @@ export default function IngredientsIdentifier({ photoUrl, onIngredientesIdentifi
   }, [photoUrl]); 
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border text-gray-500 text-center w-full">
+    <div className="bg-white rounded-lg shadow-sm border text-gray-500 text-center px-4">
       <h2 className="text-xl text-gray-600 font-semibold mb-4">Detected ingredients:</h2>
       <p className="text-lg text-gray-800 font-medium">{ingredientes}</p>
     </div>

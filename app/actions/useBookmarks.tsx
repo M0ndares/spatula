@@ -20,34 +20,38 @@ export function useBookmarks() {
   const [user, setUser] = useState<User | null>(null);
 
   async function toggleBookmark(recipe: Recipe) {
-  if (!user) return;
+    if (!user) return;
 
-  let dbRecipeId = recipe.id; 
-  const isRecipe = await getRecipeByName(recipe.name);
-  
-  if (isRecipe.length === 0) {
-    const response = await infoRecipe(recipe.name, recipe.ingredients);
-    if (response) recipe.steps = response;
+    let dbRecipe: Recipe = recipe; 
+    const isRecipe = await getRecipeByName(recipe.name);
     
-    const { success, returnRecipe} = await registerRecipe(recipe.steps, recipe.name, recipe.ingredients);
-    
-    if (success && returnRecipe) {
-      dbRecipeId = returnRecipe.id;
+    if (isRecipe.length === 0) {
+      const response = await infoRecipe(recipe.name, recipe.ingredients);
+      if (response) {
+        const toSplit = response.split('&&');
+        recipe.steps = toSplit[0].trim();
+        recipe.ingredients = toSplit[1].trim();
+      }
+      
+      const { success, returnRecipe} = await registerRecipe(recipe.steps, recipe.name, recipe.ingredients);
+      
+      if (success && returnRecipe) {
+        dbRecipe = returnRecipe;
+      }
+    } else {
+      dbRecipe = isRecipe[0];
     }
-  } else {
-    dbRecipeId = isRecipe[0].id;
-  }
 
-  const exists = bookmarkIds.includes(recipe.id);
-  
-  if (exists) {
-    setBookmarkIds((prev) => prev.filter((id) => id !== recipe.id));
-    await deleteBookmark(user.id, dbRecipeId);
-  } else {
-    setBookmarkIds((prev) => [...prev, recipe.id]);
-    await createBookmark(user.id, dbRecipeId);
+    const exists = bookmarkIds.includes(recipe.id);
+    
+    if (exists) {
+      setBookmarkIds((prev) => prev.filter((id) => id !== recipe.id));
+      await deleteBookmark(user.id, dbRecipe?.id);
+    } else {
+      setBookmarkIds((prev) => [...prev, recipe.id]);
+      await createBookmark(user.id, dbRecipe?.id);
+    }
   }
-}
 
   useEffect(() => {
     async function loadUserAndBookmarks() {

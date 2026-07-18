@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { infoRecipe } from '../actions/info';
 import { currentUser } from '../actions/userDb';
-import { getBookmarksByUserId, createBookmark, deleteBookmark } from '../actions/bookmarksDb';
+import { getBookmarksByUserId } from '../actions/bookmarksDb';
 import type { User } from "@supabase/supabase-js";
 import { getRecipeByName } from '../actions/recipesDb';
+import { useBookmarks } from '../actions/useBookmarks';
 
 interface Recipe {
   id: string;
@@ -15,12 +16,12 @@ interface Recipe {
 }
 
 export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
-  // Ajustamos el tipo para que acepte null si no hay datos o está cargando
   const [recipeInfo, setRecipeInfo] = useState<Recipe | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const { bookmarkIds, toggleBookmark } = useBookmarks();
+  
   useEffect(() => {
     async function checkUserAndBookmarks() {
       try {
@@ -59,8 +60,8 @@ export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
             const receta: Recipe = {
               id: id || name, 
               name: name,
-              ingredients: toSplit[1],
-              steps: toSplit[0],
+              ingredients: toSplit[1].trim(),
+              steps: toSplit[0].trim(),
             };
 
             setRecipeInfo(receta);
@@ -79,17 +80,13 @@ export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
     lookForRecipes();
   }, [ingredients, name, id]);
 
-  async function toggleBookmark() {
-    if (!user || !id) return;
-
-    if (isBookmarked) {
-      setIsBookmarked(false);
-      await deleteBookmark(user.id, id);
-    } else {
-      setIsBookmarked(true);
-      await createBookmark(user.id, id);
+  const handleBookmarkClick = () => {
+    if (recipeInfo) {
+      toggleBookmark(recipeInfo);
+      setIsBookmarked(!isBookmarked);
     }
-  }
+  };
+  
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -102,8 +99,8 @@ export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
           
           {user && (
             <button
-              onClick={toggleBookmark}
-              className="absolute top-6 right-6 p-2 rounded-full bg-white shadow-sm border border-red-100 hover:bg-red-50 hover:scale-105 active:scale-95 transition-all duration-200 z-10"
+              onClick={handleBookmarkClick}
+              className="absolute top-6 right-6 p-2 rounded-full hover:cursor-pointer bg-white shadow-sm border border-red-100 hover:bg-red-50 hover:scale-105 active:scale-95 transition-all duration-200 z-10"
               title={isBookmarked ? "Remove from bookmarks" : "Save to bookmarks"}
             >
               <span className={`material-symbols-outlined select-none text-2xl flex items-center justify-center ${
