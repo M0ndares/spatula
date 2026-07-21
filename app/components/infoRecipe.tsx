@@ -23,23 +23,32 @@ export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
   const { bookmarkIds, toggleBookmark } = useBookmarks();
   
   useEffect(() => {
-    async function checkUserAndBookmarks() {
-      try {
-        const { success, user } = await currentUser();
-        if (success && user) {
-          setUser(user);
+  async function checkUserAndBookmarks() {
+    try {
+      const { success, user } = await currentUser();
+      if (success && user) {
+        setUser(user);
+        
+        const existsInDb = await getRecipeByName(name);
+        
+        if (existsInDb && existsInDb.length > 0) {
+          const realDbId = existsInDb[0].id; 
+          
           const userBookmarks = await getBookmarksByUserId(user.id);
           if (userBookmarks && Array.isArray(userBookmarks)) {
-            const exists = userBookmarks.some((b: any) => b.id === id);
+            const exists = userBookmarks.some((b: any) => b.id === realDbId);
             setIsBookmarked(exists);
           }
+        } else {
+          setIsBookmarked(false);
         }
-      } catch (err) {
-        console.error("Error validando usuario en InfoRecipe:", err);
       }
+    } catch (err) {
+      console.error("Error validando usuario en InfoRecipe:", err);
     }
-    checkUserAndBookmarks();
-  }, [id]);
+  }
+  checkUserAndBookmarks();
+}, [id, name]);
 
   useEffect(() => {
     const lookForRecipes = async () => {

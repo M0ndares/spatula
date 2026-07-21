@@ -1,5 +1,6 @@
-"use server"; 
+"use server";
 import Groq from "groq-sdk";
+
 const ai = new Groq({ apiKey: process.env.GROQ_TOKEN });
 
 export async function obtenerIngredientes(fotoUrl: string) {
@@ -7,38 +8,43 @@ export async function obtenerIngredientes(fotoUrl: string) {
     ? fotoUrl.split(",")[1] 
     : fotoUrl;
 
-  const response = await ai.chat.completions.create({
-    model: "meta-llama/llama-4-scout-17b-16e-instruct", 
-    messages: [
-      {
-        role: "user",
-        content: [
-          { 
-            type: "text", 
-            text: `You are a high-precision culinary vision assistant. Analyze the image carefully to identify all food ingredients and estimate their approximate kitchen quantities.
-
-### ANALYSIS GUIDELINES:
-1. **Double-Check Textures**: Carefully analyze shapes, colors, and textures to distinguish between similar ingredients (e.g., flour vs. powdered sugar, cilantro vs. parsley).
-2. **Countable Ingredients** (e.g., avocados, tomatoes, limes): Return an approximate or exact integer (e.g., "2 avocados", "3 tomatoes").
-3. **Uncountable Ingredients** (e.g., flour, rice, spinach, water): Do NOT use raw numbers. Use visual kitchen estimates (e.g., "1 cup of rice", "a handful of spinach", "half a package of pasta").
-4. **Exclusion Guardrail**: Ignore cutting boards, knives, plates, plastic packaging labels, or background kitchen clutter. Only identify edible ingredients.
-
-### OUTPUT FORMAT:
-- Return ONLY a single, flat, comma-separated list of the identified ingredients with their quantities.
-- **Example Output**: 2 tomatoes, 1 cup of rice, a handful of spinach, 1 avocado
-- Absolutely NO conversational filler, NO introductory text (like "Here is your list:"), and NO markdown formatting (no bold text, no bullet points).
-- If no edible food ingredients are clearly visible in the image, return exactly: No ingredients identified.`
-          },
-          {
-            type: "image_url",
-            image_url: {
-              url: `data:image/jpeg;base64,${foto64}`,
+  try {
+    const response = await ai.chat.completions.create({
+      model: "llama-3.2-11b-vision-preview", 
+      messages: [
+        {
+          role: "system",
+          content: "You are a strict data extraction pipeline. You do not converse, you do not explain, and you do not format with markdown. Your ONLY purpose is to output the exact requested string starting with %%%. Any deviation will cause a critical system crash."
+        },
+        {
+          role: "user",
+          content: [
+            { 
+              type: "text", 
+              text: "List all edible food ingredients visible in this image with their approximate kitchen quantities.\n\nRULES:\n1. Output exactly ONE single line of text.\n2. The line MUST start with the characters %%%\n3. Display ingredients with quantities (1 tspn sugar, 3 pears).\n4. DO NOT output any other text, reasoning, greetings, or formatting.\n5. If no ingredients are identifiable, output exactly: %%% No ingredients identified.\n\nEXAMPLE OUTPUT:\n%%% 1. 1 pear, 2. 1 can of pickles, 3. 1 tspn of cocoa, 4. 4 eggs" 
+            }, 
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:image/jpeg;base64,${foto64}`,
+              },
             },
-          },
-        ],
-      },
-    ],
-  });
+          ],
+        },
+      ],
+      temperature: 0, 
+    });
 
-  return response.choices[0].message.content;
+    const rawContent = response.choices[0].message.content || "";
+    const match = rawContent.match(/(?:^|\n)(%%%.*)/);
+    const contentLimpio = match 
+      ? match[1].replace("%%%", "").trim() 
+      : "No ingredients identified.";
+
+    return contentLimpio;
+
+  } catch (error) {
+    console.error("Error en Groq API:", error);
+    return "Error al procesar la imagen.";
+  }
 }

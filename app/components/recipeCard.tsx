@@ -1,4 +1,7 @@
 "use client";
+
+import { useState } from "react";
+
 interface Recipe {
   id: string;
   name: string;
@@ -19,6 +22,7 @@ export default function RecipeCard({
   onSelect, 
   onBookmarkToggle 
   }: RecipeCardProps) {
+
   return (
     <div
       onClick={() => onSelect(recipe)}
@@ -40,6 +44,7 @@ export default function RecipeCard({
           onClick={(e) => {
             e.stopPropagation(); 
             onBookmarkToggle(recipe);
+
           }}
         >
           {isBookmarked ? "bookmark_added" : "bookmark"}

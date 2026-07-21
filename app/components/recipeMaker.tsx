@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createRecipes } from '../actions/recipe'; 
 import { useBookmarks } from '../actions/useBookmarks'; 
 import RecipeCard from './recipeCard'; 
+import { getRecipeByName } from '../actions/recipesDb';
 
 interface Recipes {
   id: string;
@@ -31,6 +32,7 @@ export default function RecipeMaker({
   );
   const { bookmarkIds, toggleBookmark } = useBookmarks();
 
+  // 1. Efecto original para generar las recetas
   useEffect(() => {
     if (localRecipes.length > 0) return;
 
@@ -44,25 +46,31 @@ export default function RecipeMaker({
         const resultadoRecetas = await createRecipes(ingredients);
         
         if (resultadoRecetas && resultadoRecetas.trim() !== "") {
-          const listaProcesada = resultadoRecetas
-            .split(',')
-            .map((receta, index) => {
+          const lineasRecetas = resultadoRecetas.split(',');
+
+          const listaProcesada = await Promise.all(
+            lineasRecetas.map(async (receta, index) => {
               const recetaLimpia = receta.trim();
               if (!recetaLimpia) return null;
 
               const nombreReceta = recetaLimpia.split('\n')[0] || `Recipe ${index + 1}`;
 
+              const exists = await getRecipeByName(nombreReceta);
+              const idReal = (exists && exists.length > 0) ? exists[0].id : nombreReceta;
+
               return {
-                id: nombreReceta, 
+                id: idReal, 
                 name: nombreReceta,
                 ingredients: ingredients,
                 steps: 'null' 
               };
             })
-            .filter((r): r is Recipes => r !== null); 
+          );
 
-          setLocalRecipes(listaProcesada);
-          onCreateRecipe(listaProcesada);
+          const listaSincronizada = listaProcesada.filter((r): r is Recipes => r !== null);
+
+          setLocalRecipes(listaSincronizada);
+          onCreateRecipe(listaSincronizada);
           setStatusMessage(""); 
         } else {
           setStatusMessage("Could not generate recipes. Try again later.");
@@ -74,7 +82,43 @@ export default function RecipeMaker({
     };
 
     lookForRecipes();
-  }, [ingredients, localRecipes.length, onCreateRecipe]); 
+  }, [ingredients, onCreateRecipe]); 
+
+  // =========================================================================
+  // NUEVO: Efecto para sincronizar los IDs temporales con los UUID reales
+  // =========================================================================
+  useEffect(() => {
+    const syncRecipeIds = async () => {
+      let needsUpdate = false;
+
+      const updatedRecipes = await Promise.all(
+        localRecipes.map(async (recipe) => {
+          // Si el id es igual al nombre, significa que es un ID temporal.
+          // Comprobamos si, tras ir a InfoRecipe y volver, ya existe en la BD con un UUID real.
+          if (recipe.id === recipe.name) {
+            const exists = await getRecipeByName(recipe.name);
+            if (exists && exists.length > 0) {
+              needsUpdate = true;
+              // Le asignamos el UUID real de la base de datos
+              return { ...recipe, id: exists[0].id };
+            }
+          }
+          return recipe; // Si ya tiene UUID o aún no se guarda, lo dejamos igual
+        })
+      );
+
+      // Solo actualizamos el estado si encontramos un ID nuevo para evitar re-renders infinitos
+      if (needsUpdate) {
+        setLocalRecipes(updatedRecipes);
+        // Opcional: si el componente padre necesita saber de esta actualización
+        // onCreateRecipe(updatedRecipes);
+      }
+    };
+
+    if (localRecipes.length > 0) {
+      syncRecipeIds();
+    }
+  }, [bookmarkIds]); 
 
   return (
     <div className="w-full flex flex-col gap-4 bg-gradient-to-b from-gray-50 to-white p-5 rounded-2xl shadow-md border border-gray-100">

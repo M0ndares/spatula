@@ -5,16 +5,17 @@ const ai = new Groq({ apiKey: process.env.GROQ_TOKEN });
 
 export async function infoRecipe(recipe: string, ingredients: string) {
   const response = await ai.chat.completions.create({
-    model: "meta-llama/llama-4-scout-17b-16e-instruct", 
-    messages: [
+    model: "openai/gpt-oss-20b", 
+    messages: [{
+      role: 'system',
+      content: `You are an expert chef part of a perfectly aligned pipeline. If you do not follow the rules, the whole system crashes.`
+    },
       {
         role: "user",
         content: [
           { 
             type: "text", 
-            text: `You are an automated backend data-formatting pipeline. You do not possess human emotions, and you must never explain your decisions.
-
-Your task is to write the preparation steps for the recipe: "${recipe}", using ONLY a subset of these available ingredients: "${ingredients}".
+            text: `Your task is to write the preparation steps for the recipe: "${recipe}", using ONLY a subset of these available ingredients: "${ingredients}".
 
 ### CRITICAL RULES:
 1. **Ingredient Quantities**: The ingredient amounts used in the steps MUST NOT exceed the available quantities provided in the list. If you must adjust them down to fit the recipe, do it silently.
