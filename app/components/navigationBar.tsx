@@ -8,7 +8,7 @@ interface NavigationBarProps {
 export default function NavigationBar({ currentTab, onNavigate }: NavigationBarProps) {
 
   return (
-    <nav className="w-full bg-[#2a1212]  top-0 z-50 px-4 py-3 shadow-sm">
+    <nav className="w-full bg-[#2a1212]  top-0 z-50 px-4 py-3 shadow-sm sticky">
       <div className="w-full flex justify-between items-center">
         <a 
           onClick={() => onNavigate('menu')}
