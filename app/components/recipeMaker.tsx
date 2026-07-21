@@ -84,34 +84,25 @@ export default function RecipeMaker({
     lookForRecipes();
   }, [ingredients, onCreateRecipe]); 
 
-  // =========================================================================
-  // NUEVO: Efecto para sincronizar los IDs temporales con los UUID reales
-  // =========================================================================
   useEffect(() => {
     const syncRecipeIds = async () => {
       let needsUpdate = false;
 
       const updatedRecipes = await Promise.all(
         localRecipes.map(async (recipe) => {
-          // Si el id es igual al nombre, significa que es un ID temporal.
-          // Comprobamos si, tras ir a InfoRecipe y volver, ya existe en la BD con un UUID real.
           if (recipe.id === recipe.name) {
             const exists = await getRecipeByName(recipe.name);
             if (exists && exists.length > 0) {
               needsUpdate = true;
-              // Le asignamos el UUID real de la base de datos
               return { ...recipe, id: exists[0].id };
             }
           }
-          return recipe; // Si ya tiene UUID o aún no se guarda, lo dejamos igual
+          return recipe; 
         })
       );
 
-      // Solo actualizamos el estado si encontramos un ID nuevo para evitar re-renders infinitos
       if (needsUpdate) {
         setLocalRecipes(updatedRecipes);
-        // Opcional: si el componente padre necesita saber de esta actualización
-        // onCreateRecipe(updatedRecipes);
       }
     };
 

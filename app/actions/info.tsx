@@ -28,7 +28,7 @@ export async function infoRecipe(recipe: string, ingredients: string) {
 - **No Meta-Commentary**: Absolutely NO conversational filler, NO introductory text, and NO parenthetical notes (e.g., do NOT write things like "(I removed the 'a'...)" or "(Note: adjusted quantities)"). 
 - **System Constraints**: Your output is processed directly by an automated string-parsing script. Any extra word, character, note, or clarification outside the requested template will completely crash the production application.
 - **First Character**: The very first character of your entire response MUST be the number "1".
-- Immediately after the final step, add a line break, write exactly the delimiter "&&", and then list ONLY the ingredients used in this recipe (one per line, with their used quantities, without bullet points or dashes).
+- Immediately after the final step, write exactly the delimiter "&&", and then list ONLY the ingredients used in this recipe (one per line, with their used quantities, without bullet points or dashes).
 
 ### TARGET TEMPLATE:
 1. Step one instructions here.

@@ -10,7 +10,7 @@ export async function obtenerIngredientes(fotoUrl: string) {
 
   try {
     const response = await ai.chat.completions.create({
-      model: "llama-3.2-11b-vision-preview", 
+      model: "qwen/qwen3.6-27b", 
       messages: [
         {
           role: "system",
@@ -45,6 +45,6 @@ export async function obtenerIngredientes(fotoUrl: string) {
 
   } catch (error) {
     console.error("Error en Groq API:", error);
-    return "Error al procesar la imagen.";
+    return `Error ${error}`
   }
 }
