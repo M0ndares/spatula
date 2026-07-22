@@ -5,19 +5,13 @@ import { createRecipes } from '../actions/recipe';
 import { useBookmarks } from '../actions/useBookmarks'; 
 import RecipeCard from './recipeCard'; 
 import { getRecipeByName } from '../actions/recipesDb';
-
-interface Recipes {
-  id: string;
-  name: string;
-  ingredients: string;
-  steps: string;
-}
+import { RecipesTemplate } from '../page';
 
 interface RecipeMakerProps {
   ingredients: string; 
-  onSelectRecipe: (receta: Recipes) => void; 
-  existingRecipes?: Recipes[] | null;
-  onCreateRecipe: (recipes: Recipes[]) => void;
+  onSelectRecipe: (receta: RecipesTemplate) => void; 
+  existingRecipes?: RecipesTemplate[] | null;
+  onCreateRecipe: (recipes: RecipesTemplate[]) => void;
 }
 
 export default function RecipeMaker({ 
@@ -26,7 +20,7 @@ export default function RecipeMaker({
   existingRecipes = null, 
   onCreateRecipe 
 }: RecipeMakerProps) {
-  const [localRecipes, setLocalRecipes] = useState<Recipes[]>(existingRecipes || []);
+  const [localRecipes, setLocalRecipes] = useState<RecipesTemplate[]>(existingRecipes || []);
   const [statusMessage, setStatusMessage] = useState<string>(
     existingRecipes && existingRecipes.length > 0 ? "" : "Generating delicious recipes for you..."
   );
@@ -67,7 +61,7 @@ export default function RecipeMaker({
             })
           );
 
-          const listaSincronizada = listaProcesada.filter((r): r is Recipes => r !== null);
+          const listaSincronizada = listaProcesada.filter((r): r is RecipesTemplate => r !== null);
 
           setLocalRecipes(listaSincronizada);
           onCreateRecipe(listaSincronizada);

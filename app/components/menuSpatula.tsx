@@ -5,16 +5,10 @@ import { fonts } from "../actions/fonts";
 import { getRecipeById } from "../actions/recipesDb";
 import { useBookmarks } from "../actions/useBookmarks"; 
 import RecipeCard from "./recipeCard";
-
-interface Recipe {
-  id: string;
-  name: string;
-  steps: string;
-  ingredients: string;
-}
+import { RecipesTemplate } from "../page";
 
 interface MenuSpatulaProps {
-  onSelectRecipe: (recipe: Recipe) => void;
+  onSelectRecipe: (recipe: RecipesTemplate) => void;
 }
 export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
   const topRecipes = [
@@ -23,7 +17,7 @@ export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
     'd3e734a7-3eb5-47d0-88c7-4ed363a50e7b'
   ];
   
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<RecipesTemplate[]>([]);
   const { bookmarkIds, toggleBookmark } = useBookmarks();
 
   useEffect(() => {
@@ -34,7 +28,7 @@ export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
         );
 
         if (recetasObtenidas) {
-          setRecipes(recetasObtenidas.flat().filter(Boolean) as Recipe[]);
+          setRecipes(recetasObtenidas.flat().filter(Boolean) as RecipesTemplate[]);
         }
       } catch (error) {
         console.error("Error cargando las recetas estáticas:", error);
@@ -63,7 +57,7 @@ export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
                 recipe={recipe} 
                 isBookmarked={isBookmarked} 
                 onSelect={() => onSelectRecipe(recipe)} 
-                onBookmarkToggle={(r) => toggleBookmark(r as Recipe)} 
+                onBookmarkToggle={(r) => toggleBookmark(r as RecipesTemplate)} 
               />
             );
           })}

@@ -7,22 +7,16 @@ import type { User } from "@supabase/supabase-js";
 import { isSupabaseUser } from "../components/profileSection";
 import { getRecipeByName, registerRecipe } from "./recipesDb";
 import { infoRecipe } from "./info";
-
-interface Recipe {
-  id: string;
-  name: string;
-  steps: string;
-  ingredients: string;
-}
+import { RecipesTemplate } from "../page";
 
 export function useBookmarks() {
   const [bookmarkIds, setBookmarkIds] = useState<string[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
-  async function toggleBookmark(recipe: Recipe) {
+  async function toggleBookmark(recipe: RecipesTemplate) {
     if (!user) return;
 
-    let dbRecipe: Recipe = recipe; 
+    let dbRecipe: RecipesTemplate = recipe; 
     const isRecipe = await getRecipeByName(recipe.name);
     
     if (isRecipe.length === 0) {

@@ -2,100 +2,70 @@
 
 import { useState, useEffect } from 'react';
 import { infoRecipe } from '../actions/info';
-import { currentUser } from '../actions/userDb';
-import { getBookmarksByUserId } from '../actions/bookmarksDb';
-import type { User } from "@supabase/supabase-js";
 import { getRecipeByName } from '../actions/recipesDb';
 import { useBookmarks } from '../actions/useBookmarks';
+import { RecipesTemplate } from '../page';
 
-interface Recipe {
-  id: string;
-  name: string;
-  ingredients: string;
-  steps: string;
-}
-
-export default function InfoRecipe({ ingredients, name, id, steps }: Recipe) {
-  const [recipeInfo, setRecipeInfo] = useState<Recipe | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+export default function InfoRecipe({ ingredients, name, id, steps }: RecipesTemplate) {
+  const [recipeInfo, setRecipeInfo] = useState<RecipesTemplate | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { bookmarkIds, toggleBookmark } = useBookmarks();
   
-  useEffect(() => {
-  async function checkUserAndBookmarks() {
-    try {
-      const { success, user } = await currentUser();
-      if (success && user) {
-        setUser(user);
-        
-        const existsInDb = await getRecipeByName(name);
-        
-        if (existsInDb && existsInDb.length > 0) {
-          const realDbId = existsInDb[0].id; 
-          
-          const userBookmarks = await getBookmarksByUserId(user.id);
-          if (userBookmarks && Array.isArray(userBookmarks)) {
-            const exists = userBookmarks.some((b: any) => b.id === realDbId);
-            setIsBookmarked(exists);
-          }
-        } else {
-          setIsBookmarked(false);
-        }
-      }
-    } catch (err) {
-      console.error("Error validando usuario en InfoRecipe:", err);
-    }
-  }
-  checkUserAndBookmarks();
-}, [id, name]);
+  // 1. Usamos tu hook que ya hace todo el trabajo pesado de sesión y base de datos
+  const { bookmarkIds, toggleBookmark, user } = useBookmarks();
+  
+  // 2. Estado local para la actualización visual instantánea (como en RecipeMaker)
+  const [localIsBookmarked, setLocalIsBookmarked] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const lookForRecipes = async () => {
-      if (!ingredients || ingredients === 'No ingredients identified') {
-        setRecipeInfo(null);
+    const fetchOrGenerateRecipe = async () => {
+      setIsLoading(true);
+      
+      // CASO A: La receta viene completa desde [id]/page.tsx (ya tiene pasos reales)
+      if (steps && steps !== 'null' && steps.trim() !== '') {
+        setRecipeInfo({ id, name, ingredients, steps });
         setIsLoading(false);
         return;
       }
 
+      // CASO B: La receta viene de RecipeMaker con steps en 'null'. Hay que generarlos.
       try {
-        setIsLoading(true);
         const exists = await getRecipeByName(name);
         
-        if (exists.length === 0) {
-          const resultadoRecetas = await infoRecipe(name, ingredients);
-          const toSplit = resultadoRecetas?.split('&&')
-          if (toSplit && resultadoRecetas) {
-            const receta: Recipe = {
-              id: id || name, 
-              name: name,
-              ingredients: toSplit[1].trim(),
-              steps: toSplit[0].trim(),
-            };
-
-            setRecipeInfo(receta);
-          }
-        } else {
+        if (exists && exists.length > 0) {
           setRecipeInfo(exists[0]);
+        } else {
+          const resultado = await infoRecipe(name, ingredients);
+          if (resultado) {
+            const toSplit = resultado.split('&&');
+            setRecipeInfo({
+              id: id || name,
+              name: name,
+              ingredients: toSplit[1]?.trim() || ingredients,
+              steps: toSplit[0]?.trim() || "No steps available.",
+            });
+          }
         }
       } catch (err) {
-        console.error("Error creating recipes:", err);
+        console.error("Error generating recipe details:", err);
         setRecipeInfo(null);
       } finally {
         setIsLoading(false);
       }
     };
 
-    lookForRecipes();
-  }, [ingredients, name, id]);
+    fetchOrGenerateRecipe();
+  }, [id, name, ingredients, steps]);
+
+  const isBookmarked = localIsBookmarked !== null 
+    ? localIsBookmarked 
+    : (recipeInfo ? bookmarkIds.includes(recipeInfo.id) : false);
 
   const handleBookmarkClick = () => {
     if (recipeInfo) {
-      toggleBookmark(recipeInfo);
-      setIsBookmarked(!isBookmarked);
+      setLocalIsBookmarked(!isBookmarked); 
+      toggleBookmark(recipeInfo);          
     }
   };
-  
 
   return (
     <div className="w-full flex flex-col gap-4">

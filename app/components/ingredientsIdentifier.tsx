@@ -5,31 +5,31 @@ import EditableBio from './bioSection';
 
 interface IngredientsIdentifierProps {
   photoUrl: string; 
-  onIngredientesIdentificados: (ingredientes: string) => void; 
+  onIngredientesIdentified: (ingredientes: string) => void; 
 }
 
-export default function IngredientsIdentifier({ photoUrl, onIngredientesIdentificados }: IngredientsIdentifierProps) {
-  const [ingredientes, setIngredientes] = useState<string>("Cargando ingredientes...");
+export default function IngredientsIdentifier({ photoUrl, onIngredientesIdentified }: IngredientsIdentifierProps) {
+  const [ingredientes, setIngredientes] = useState<string>("Loading ingredients...");
   const handleSaveIngredients = async (newIngredients: string) => {
     if(newIngredients) setIngredientes(newIngredients);
   }
   useEffect(() => {
-    async function llamarServerAction() {
+    async function callServerAction() {
       try {
         if (!photoUrl) return;
-        setIngredientes("Analizando imagen...");
+        setIngredientes("Analizing image...");
         const texto = await obtenerIngredientes(photoUrl);
         
         if (texto) {
           setIngredientes(texto);
-          onIngredientesIdentificados(texto); 
+          onIngredientesIdentified(texto); 
         }
       } catch (err) {
-        console.error("Error en el cliente:", err);
+        console.error("Client error:", err);
       }
     }
 
-    llamarServerAction();
+    callServerAction();
   }, [photoUrl]); 
 
   return (

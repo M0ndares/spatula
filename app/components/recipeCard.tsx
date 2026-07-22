@@ -1,19 +1,11 @@
 "use client";
-
-import { useState } from "react";
-
-interface Recipe {
-  id: string;
-  name: string;
-  steps: string;
-  ingredients: string;
-}
+import { RecipesTemplate } from "../page";
 
 interface RecipeCardProps {
-  recipe: Recipe;
+  recipe: RecipesTemplate;
   isBookmarked: boolean;
-  onSelect: (recipe: Recipe) => void;
-  onBookmarkToggle: (recipe: Recipe) => void;
+  onSelect: (recipe: RecipesTemplate) => void;
+  onBookmarkToggle: (recipe: RecipesTemplate) => void;
 }
 
 export default function RecipeCard({ 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NavigationBar from "./components/navigationBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +37,12 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" 
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="bg-black min-h-screen text-red-950 antialiased">        
+        <div className="bg-gray-50 w-full max-w-sm mx-auto min-h-screen flex flex-col pt-0 px-0 pb-6">
+          <NavigationBar></NavigationBar>
+          {children}
+        </div>
+      </body>
     </html>
   );
 }

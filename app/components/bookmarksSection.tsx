@@ -5,20 +5,14 @@ import { fonts } from "../actions/fonts";
 import { getRecipeById } from "../actions/recipesDb";
 import { useBookmarks } from "../actions/useBookmarks"; 
 import RecipeCard from "./recipeCard"; 
-
-interface Recipes {
-  name: string;
-  steps: string;
-  id: string;
-  ingredients: string;
-}
+import { RecipesTemplate } from "../page";
 
 interface BookmarksSectionProps {
-  onSelectRecipe: (receta: Recipes) => void;
+  onSelectRecipe: (receta: RecipesTemplate) => void;
 }
 
 export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionProps) {
-  const [currentBookmarks, setCurrentBookmarks] = useState<Recipes[]>([]);
+  const [currentBookmarks, setCurrentBookmarks] = useState<RecipesTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { bookmarkIds, toggleBookmark } = useBookmarks();
 
@@ -37,10 +31,10 @@ export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionPro
         );
 
         if (recetascompletas) {
-          setCurrentBookmarks(recetascompletas.flat().filter(Boolean) as Recipes[]);
+          setCurrentBookmarks(recetascompletas.flat().filter(Boolean) as RecipesTemplate[]);
         }
       } catch (error) {
-        console.error("Error al sincronizar las recetas de los favoritos:", error);
+        console.error("Error syncing bookmarks:", error);
       } finally {
         setIsLoading(false);
       }
@@ -80,7 +74,7 @@ export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionPro
                   recipe={recipe} 
                   isBookmarked={isBookmarked} 
                   onSelect={() => onSelectRecipe(recipe)} 
-                  onBookmarkToggle={(r) => toggleBookmark(r as Recipes)} 
+                  onBookmarkToggle={(r) => toggleBookmark(r as RecipesTemplate)} 
                 />
               );
             })}
