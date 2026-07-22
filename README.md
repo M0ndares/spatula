@@ -1,7 +1,7 @@
 # spatula: AI powered chef
-Capture, choose, cook.
+Capture, choose, cook. Spatula utilizes AI to identify ingredients on a photo, create recipes out of the identified ingredients and explain step by step the preparation.
 <div>
-<img src="tu-imagen.gif" width="50%" alt="Mi GIF" />
+<img src="spatula.gif" width="50%" alt="Mi GIF" />
 
 ### Demo
 - **Frontend:** [https://spatula-taupe.vercel.app/](https://spatula-taupe.vercel.app/)
