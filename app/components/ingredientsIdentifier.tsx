@@ -36,7 +36,6 @@ export default function IngredientsIdentifier({ photoUrl, onIngredientesIdentifi
     <div className="bg-red-950/20 rounded-xl shadow-sm border text-gray-500 text-center w-87">
       <h2 className="text-xl text-red-900 font-semibold m-2">Detected ingredients:</h2>
       <EditableBio initialBio={ingredientes} onSave={handleSaveIngredients}></EditableBio>
-
     </div>
   );
 }
