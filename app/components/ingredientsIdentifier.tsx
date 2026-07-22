@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { obtenerIngredientes } from '../actions/ingredients'; 
+import EditableBio from './bioSection';
 
 interface IngredientsIdentifierProps {
   photoUrl: string; 
@@ -9,7 +10,9 @@ interface IngredientsIdentifierProps {
 
 export default function IngredientsIdentifier({ photoUrl, onIngredientesIdentificados }: IngredientsIdentifierProps) {
   const [ingredientes, setIngredientes] = useState<string>("Cargando ingredientes...");
-
+  const handleSaveIngredients = async (newIngredients: string) => {
+    if(newIngredients) setIngredientes(newIngredients);
+  }
   useEffect(() => {
     async function llamarServerAction() {
       try {
@@ -30,9 +33,10 @@ export default function IngredientsIdentifier({ photoUrl, onIngredientesIdentifi
   }, [photoUrl]); 
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border text-gray-500 text-center w-80">
-      <h2 className="text-xl text-gray-600 font-semibold mb-4">Detected ingredients:</h2>
-      <p className="text-lg text-gray-800 font-medium">{ingredientes}</p>
+    <div className="bg-red-950/20 rounded-xl shadow-sm border text-gray-500 text-center w-87">
+      <h2 className="text-xl text-red-900 font-semibold m-2">Detected ingredients:</h2>
+      <EditableBio initialBio={ingredientes} onSave={handleSaveIngredients}></EditableBio>
+
     </div>
   );
 }

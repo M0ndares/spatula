@@ -79,24 +79,30 @@ export default function Spatula() {
               
               {photo && !showRecipes && (
                 <div className="flex flex-col items-center">
-                  <PhotoCapture photoUrl={photo} onRestartCamera={() => setPhoto(null)} />
+                  <PhotoCapture photoUrl={photo}  />
                   <br />
                   <IngredientsIdentifier 
                     photoUrl={photo} 
-                    onIngredientesIdentificados={(resultado) => setIngredients(resultado)} 
+                    onIngredientesIdentificados={(resultado) => setIngredients(resultado) } 
                   />
-                  
-                  <button 
-                    onClick={() => setShowRecipes(true)}
-                    disabled={!ingredients || ingredients === 'No ingredients identified.'}
-                    className={`text-white font-bold py-3 px-6 rounded-full shadow-lg transition mt-6 ${
-                      !ingredients || ingredients === 'No ingredients identified.'
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-red-800 cursor-pointer shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 hover:bg-[#2a1212] transition-all duration-200 transform hover:-translate-y-0.5 group" 
-                    }`}
-                  >
-                    Look for recipes
-                  </button>
+                  <div className="gap-4 flex">     
+                    <button 
+                      onClick={() => setPhoto(null)} 
+                      className="py-3 px-3 mt-6 bg-red-800 hover:bg-red-900 cursor-pointer text-white font-bold rounded-full shadow-lg transition ">
+                      Take another photo
+                    </button>
+                    <button 
+                      onClick={() => setShowRecipes(true)}
+                      disabled={!ingredients || ingredients === 'No ingredients identified.'}
+                      className={`py-3 px-3 mt-6 text-white font-bold rounded-full shadow-lg transition ${
+                        !ingredients || ingredients === 'No ingredients identified.'
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-red-800 cursor-pointer shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 hover:bg-[#2a1212] transition-all duration-200 transform hover:-translate-y-0.5 group" 
+                      }`}
+                    >
+                      Look for recipes
+                    </button>
+                  </div>
                 </div>
               )}
 

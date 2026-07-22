@@ -337,6 +337,9 @@ export default function ProfileSection() {
             </div>
 
             <div>
+                <label className="block text-[10px] uppercase tracking-wider text-red-800 font-semibold mb-1 ml-1">
+                  Bio
+                </label>
               <EditableBio initialBio={userMetadata?.bio || ""} onSave={handleSaveBio}></EditableBio>
             </div>
           </div>
