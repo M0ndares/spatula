@@ -9,39 +9,32 @@ import { RecipesTemplate } from '../page';
 export default function InfoRecipe({ ingredients, name, id, steps }: RecipesTemplate) {
   const [recipeInfo, setRecipeInfo] = useState<RecipesTemplate | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  
-  // 1. Usamos tu hook que ya hace todo el trabajo pesado de sesión y base de datos
   const { bookmarkIds, toggleBookmark, user } = useBookmarks();
-  
-  // 2. Estado local para la actualización visual instantánea (como en RecipeMaker)
   const [localIsBookmarked, setLocalIsBookmarked] = useState<boolean | null>(null);
 
   useEffect(() => {
     const fetchOrGenerateRecipe = async () => {
       setIsLoading(true);
       
-      // CASO A: La receta viene completa desde [id]/page.tsx (ya tiene pasos reales)
       if (steps && steps !== 'null' && steps.trim() !== '') {
         setRecipeInfo({ id, name, ingredients, steps });
         setIsLoading(false);
         return;
       }
 
-      // CASO B: La receta viene de RecipeMaker con steps en 'null'. Hay que generarlos.
       try {
         const exists = await getRecipeByName(name);
         
         if (exists && exists.length > 0) {
           setRecipeInfo(exists[0]);
         } else {
-          const resultado = await infoRecipe(name, ingredients);
-          if (resultado) {
-            const toSplit = resultado.split('&&');
+          const {stepsOutput, ingredientsOutput} = await infoRecipe(name, ingredients);
+          if (ingredientsOutput && stepsOutput) {
             setRecipeInfo({
               id: id || name,
               name: name,
-              ingredients: toSplit[1]?.trim() || ingredients,
-              steps: toSplit[0]?.trim() || "No steps available.",
+              ingredients: ingredientsOutput || ingredients,
+              steps: stepsOutput || "No steps available.",
             });
           }
         }

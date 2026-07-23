@@ -20,11 +20,10 @@ export function useBookmarks() {
     const isRecipe = await getRecipeByName(recipe.name);
     
     if (isRecipe.length === 0) {
-      const response = await infoRecipe(recipe.name, recipe.ingredients);
-      if (response) {
-        const toSplit = response.split('&&');
-        recipe.steps = toSplit[0].trim();
-        recipe.ingredients = toSplit[1].trim();
+      const {ingredientsOutput, stepsOutput} = await infoRecipe(recipe.name, recipe.ingredients);
+      if (ingredientsOutput && stepsOutput) {
+        recipe.steps = stepsOutput;
+        recipe.ingredients = ingredientsOutput;
       }
       
       const { success, returnRecipe} = await registerRecipe(recipe.steps, recipe.name, recipe.ingredients);

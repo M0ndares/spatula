@@ -15,7 +15,7 @@ export default async function RecipeDetail({ params, searchParams }: PageProps) 
   const originPage = resolvedSearchParams?.from || "";
   const backHref = originPage ? `/${originPage}` : "/";
   const backLabel = originPage ? originPage : "home";
-  const currentRecipe = await getRecipeById(recipeId);
+  const currentRecipe = await getRecipeById(recipeId) || null;
 
   return (
     <div className="mt-4">

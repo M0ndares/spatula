@@ -40,6 +40,7 @@ export async function infoRecipe(recipe: string, ingredients: string) {
       },
     ],
   });
-
-  return response.choices[0].message.content;
+  const output = response.choices[0].message.content?.split('&&')
+  if(output) return {ingredientsOutput: output[1], stepsOutput: output[0]};
+  return {ingredientsOutput: null, stepsOutput: null}
 }

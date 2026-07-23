@@ -3,7 +3,7 @@ import Groq from "groq-sdk";
 
 const ai = new Groq({ apiKey: process.env.GROQ_TOKEN });
 
-export async function obtenerIngredientes(fotoUrl: string) {
+export async function getIngredients(fotoUrl: string) {
   const foto64 = fotoUrl.includes(",") 
     ? fotoUrl.split(",")[1] 
     : fotoUrl;
@@ -42,7 +42,6 @@ export async function obtenerIngredientes(fotoUrl: string) {
       : "No ingredients identified.";
 
     return contentLimpio;
-
   } catch (error) {
     console.error("Error en Groq API:", error);
     return `Error ${error}`

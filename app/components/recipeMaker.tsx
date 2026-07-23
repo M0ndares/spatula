@@ -26,7 +26,6 @@ export default function RecipeMaker({
   );
   const { bookmarkIds, toggleBookmark } = useBookmarks();
 
-  // 1. Efecto original para generar las recetas
   useEffect(() => {
     if (localRecipes.length > 0) return;
 

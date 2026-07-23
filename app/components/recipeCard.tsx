@@ -1,5 +1,7 @@
 "use client";
 import { RecipesTemplate } from "../page";
+import { getRecipeByName, registerRecipe } from "../actions/recipesDb";
+import { infoRecipe } from "../actions/info";
 
 interface RecipeCardProps {
   recipe: RecipesTemplate;
@@ -14,10 +16,22 @@ export default function RecipeCard({
   onSelect, 
   onBookmarkToggle 
   }: RecipeCardProps) {
-
+  
+  const handleSelect = async () => {
+      const exists = await getRecipeByName(recipe.name);
+      if(exists.length > 0) onSelect(recipe)
+      else {
+        const {stepsOutput, ingredientsOutput} = await infoRecipe(recipe.name, recipe.ingredients)
+        if(!stepsOutput || !ingredientsOutput) return
+        const {success, returnRecipe} = await registerRecipe(stepsOutput, recipe.name, ingredientsOutput);
+        if(success) onSelect(returnRecipe);
+        else return 
+      }
+    }
+  
   return (
     <div
-      onClick={() => onSelect(recipe)}
+      onClick={() => handleSelect()}
       className="p-4 m-2 px-5 bg-red-950/20 rounded-xl border border-red-950/40 text-left cursor-pointer
                  shadow-lg hover:shadow-red-950/50 hover:border-red-800/60 hover:bg-[#2a1212]
                  transition-all duration-200 transform hover:-translate-y-0.5 group"
@@ -36,7 +50,6 @@ export default function RecipeCard({
           onClick={(e) => {
             e.stopPropagation(); 
             onBookmarkToggle(recipe);
-
           }}
         >
           {isBookmarked ? "bookmark_added" : "bookmark"}

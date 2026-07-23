@@ -35,7 +35,7 @@ export default function Recipes() {
                   <br />
                   <IngredientsIdentifier 
                     photoUrl={photo} 
-                    onIngredientesIdentified={(resultado) => setIngredients(resultado) } 
+                    onIngredientsIdentified={(ingredients: string) => setIngredients(ingredients) } 
                   />
                   <div className="gap-4 flex">     
                     <button 
