@@ -79,9 +79,6 @@ export default function RecipeMaker({
 
   useEffect(() => {
     const syncRecipeIds = async () => {
-      const hasTemporaryIds = localRecipes.some(r => r.id === r.name);
-      if (!hasTemporaryIds) return; // Cortamos ejecución si no es necesario
-
       let needsUpdate = false;
       const updatedRecipes = await Promise.all(
         localRecipes.map(async (recipe) => {

@@ -15,34 +15,43 @@ export function useBookmarks() {
 
   async function toggleBookmark(recipe: RecipesTemplate) {
     if (!user) return;
+    const isCurrentlyBookmarked = bookmarkIds.includes(recipe.id);
+    const previousBookmarkIds = [...bookmarkIds];
 
-    let dbRecipe: RecipesTemplate = recipe; 
-    const isRecipe = await getRecipeByName(recipe.name);
-    
-    if (isRecipe.length === 0) {
-      const {ingredientsOutput, stepsOutput} = await infoRecipe(recipe.name, recipe.ingredients);
-      if (ingredientsOutput && stepsOutput) {
-        recipe.steps = stepsOutput;
-        recipe.ingredients = ingredientsOutput;
-      }
-      
-      const { success, returnRecipe} = await registerRecipe(recipe.steps, recipe.name, recipe.ingredients);
-      
-      if (success && returnRecipe) {
-        dbRecipe = returnRecipe;
-      }
-    } else {
-      dbRecipe = isRecipe[0];
-    }
-
-    const exists = bookmarkIds.includes(recipe.id);
-    
-    if (exists) {
+    if (isCurrentlyBookmarked) {
       setBookmarkIds((prev) => prev.filter((id) => id !== recipe.id));
-      await deleteBookmark(user.id, dbRecipe?.id);
     } else {
       setBookmarkIds((prev) => [...prev, recipe.id]);
-      await createBookmark(user.id, dbRecipe?.id);
+    }
+
+    try {
+      let dbRecipe: RecipesTemplate = recipe; 
+      const isRecipe = await getRecipeByName(recipe.name);
+      
+      if (isRecipe.length === 0) {
+        const {ingredientsOutput, stepsOutput} = await infoRecipe(recipe.name, recipe.ingredients);
+        if (ingredientsOutput && stepsOutput) {
+          recipe.steps = stepsOutput;
+          recipe.ingredients = ingredientsOutput;
+        }
+        
+        const { success, returnRecipe} = await registerRecipe(recipe.steps, recipe.name, recipe.ingredients);
+        
+        if (success && returnRecipe) {
+          dbRecipe = returnRecipe;
+        }
+      } else {
+        dbRecipe = isRecipe[0];
+      }
+      if (isCurrentlyBookmarked) {
+        await deleteBookmark(user.id, dbRecipe?.id);
+      } else {
+        await createBookmark(user.id, dbRecipe?.id);
+      }
+
+    } catch (error) {
+      console.error("Failed to sync bookmark. Reverting UI:", error);
+      setBookmarkIds(previousBookmarkIds);
     }
   }
 

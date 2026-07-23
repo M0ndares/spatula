@@ -65,7 +65,7 @@ export default function Recipes() {
                     onCreateRecipe={setCreatedRecipes}
                     ingredients={ingredients} 
                     onSelectRecipe={(recipeObj: RecipesTemplate) => {
-                      router.push(`/recipes/${recipeObj.id}?from=recipes`)
+                      router.push(`/recipes/${recipeObj.id}`)
                     }} 
                   />
                   <button 

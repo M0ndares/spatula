@@ -1,6 +1,5 @@
 "use client"
 import BookmarksSection from "../components/bookmarksSection";
-import Link from "next/navigation";
 
 interface Recipes {
   id: string;

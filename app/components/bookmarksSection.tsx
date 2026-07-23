@@ -72,7 +72,7 @@ export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionPro
               return (
                 <Link
                   key={recipe.id} 
-                  href={`/recipes/${recipe.id}?from=bookmarks`} 
+                  href={`/recipes/${recipe.id}`} 
                   className="block">
                   <RecipeCard 
                     key={recipe.id} 
