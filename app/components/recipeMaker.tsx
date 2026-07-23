@@ -20,12 +20,12 @@ export default function RecipeMaker({
   existingRecipes = null, 
   onCreateRecipe 
 }: RecipeMakerProps) {
+  const { bookmarkIds, toggleBookmark } = useBookmarks();
   const [localRecipes, setLocalRecipes] = useState<RecipesTemplate[]>(existingRecipes || []);
   const [statusMessage, setStatusMessage] = useState<string>(
     existingRecipes && existingRecipes.length > 0 ? "" : "Generating delicious recipes for you..."
   );
-  const { bookmarkIds, toggleBookmark } = useBookmarks();
-
+  
   useEffect(() => {
     if (localRecipes.length > 0) return;
 
@@ -47,7 +47,6 @@ export default function RecipeMaker({
               if (!recetaLimpia) return null;
 
               const nombreReceta = recetaLimpia.split('\n')[0] || `Recipe ${index + 1}`;
-
               const exists = await getRecipeByName(nombreReceta);
               const idReal = (exists && exists.length > 0) ? exists[0].id : nombreReceta;
 
@@ -75,19 +74,22 @@ export default function RecipeMaker({
     };
 
     lookForRecipes();
-  }, [ingredients, onCreateRecipe]); 
+    
+  }, [ingredients]); 
 
   useEffect(() => {
     const syncRecipeIds = async () => {
-      let needsUpdate = false;
+      const hasTemporaryIds = localRecipes.some(r => r.id === r.name);
+      if (!hasTemporaryIds) return; // Cortamos ejecución si no es necesario
 
+      let needsUpdate = false;
       const updatedRecipes = await Promise.all(
         localRecipes.map(async (recipe) => {
           if (recipe.id === recipe.name) {
             const exists = await getRecipeByName(recipe.name);
             if (exists && exists.length > 0) {
               needsUpdate = true;
-              return { ...recipe, id: exists[0].id };
+              return { ...recipe, id: exists[0].id }; // Intercambiamos por el UUID real
             }
           }
           return recipe; 
@@ -102,7 +104,7 @@ export default function RecipeMaker({
     if (localRecipes.length > 0) {
       syncRecipeIds();
     }
-  }, [bookmarkIds]); 
+  }, [bookmarkIds, localRecipes]); 
 
   return (
     <div className="w-full flex flex-col gap-4 bg-gradient-to-b from-gray-50 to-white p-5 rounded-2xl shadow-md border border-gray-100">
@@ -120,13 +122,13 @@ export default function RecipeMaker({
                 key={index}
                 recipe={currentRecipeObject}
                 isBookmarked={isBookmarked}
-                onSelect={(r) => onSelectRecipe(r)}
-                onBookmarkToggle={(r) => toggleBookmark(r)} 
+                onSelect={onSelectRecipe} 
+                onBookmarkToggle={toggleBookmark} 
               />
             );
           })
         ) : (
-          <p className="text-gray-500 italic text-center py-4">{statusMessage}</p>
+          <p className="text-gray-500 italic text-center py-4 animate-pulse">{statusMessage}</p>
         )}
       </div>
     </div>

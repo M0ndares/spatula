@@ -13,7 +13,7 @@ export default function NavigationBar() {
           onClick={() => setCurrentTab('menu')}
         >
           <img 
-            src={'spatula.png'} 
+            src={'/spatula.png'} 
             className="h-8 w-auto pr-3 object-contain" 
             alt="Spatula Logo" 
           />

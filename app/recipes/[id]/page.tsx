@@ -4,7 +4,6 @@ import Link from "next/link";
 
 interface PageProps {
   params: Promise<{ id: string }> | { id: string };
-  // Next.js nos inyecta searchParams automáticamente con los valores del '?'
   searchParams: Promise<{ from?: string }> | { from?: string };
 }
 
@@ -14,7 +13,7 @@ export default async function RecipeDetail({ params, searchParams }: PageProps) 
   const recipeId = resolvedParams.id;
   const originPage = resolvedSearchParams?.from || "";
   const backHref = originPage ? `/${originPage}` : "/";
-  const backLabel = originPage ? originPage : "home";
+  const backLabel = originPage ? originPage : "/";
   const currentRecipe = await getRecipeById(recipeId) || null;
 
   return (

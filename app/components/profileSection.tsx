@@ -31,8 +31,6 @@ export default function ProfileSection() {
   const [currentError, setCurrentError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userBookmarks, setUserBookmarks] = useState<number | null>(null)
-  const [isEditingBio, setIsEditingBio] = useState(false);
-  const [bioText, setBioText] = useState(userMetadata?.bio || "No bio added yet.");
 
   const handleSaveBio = async (newBio: string) => {
     const {success, user} = await currentUser()

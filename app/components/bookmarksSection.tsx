@@ -6,6 +6,7 @@ import { getRecipeById } from "../actions/recipesDb";
 import { useBookmarks } from "../actions/useBookmarks"; 
 import RecipeCard from "./recipeCard"; 
 import { RecipesTemplate } from "../page";
+import Link from "next/link";
 
 interface BookmarksSectionProps {
   onSelectRecipe: (receta: RecipesTemplate) => void;
@@ -69,13 +70,18 @@ export default function BookmarksSection({ onSelectRecipe }: BookmarksSectionPro
             {currentBookmarks.map((recipe) => {
               const isBookmarked = bookmarkIds.includes(recipe.id);
               return (
-                <RecipeCard 
+                <Link
                   key={recipe.id} 
-                  recipe={recipe} 
-                  isBookmarked={isBookmarked} 
-                  onSelect={() => onSelectRecipe(recipe)} 
-                  onBookmarkToggle={(r) => toggleBookmark(r as RecipesTemplate)} 
-                />
+                  href={`/recipes/${recipe.id}?from=bookmarks`} 
+                  className="block">
+                  <RecipeCard 
+                    key={recipe.id} 
+                    recipe={recipe} 
+                    isBookmarked={isBookmarked} 
+                    onSelect={() => onSelectRecipe(recipe)} 
+                    onBookmarkToggle={(r) => toggleBookmark(r as RecipesTemplate)} 
+                  />
+                </Link>
               );
             })}
           </div>

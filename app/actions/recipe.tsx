@@ -16,7 +16,7 @@ export async function createRecipes(ingredients: string) {
           ### CRITICAL RULES:
           1. **Ingredient Restrictions**: You may ONLY use the ingredients provided in the list. However, you are automatically allowed to assume the user has standard kitchen staples: salt, black pepper, water, and basic cooking oil. Do NOT include any other external ingredients.
           2. **Recipe Feasibility**: The recipes must be realistic to cook at home and actually taste good. Do not combine ingredients that clash.
-          3. **Concise Names**: Recipe titles must be short, appealing, and direct (maximum 5 words per title).
+          3. **Concise Names**: Recipe titles must be short, appealing, and direct (maximum 5 words per title and without any adjectives nor filler words).
 
           ### OUTPUT FORMAT (STRICT):
           - Return EXACTLY a comma-separated list containing only the 3 recipe names.

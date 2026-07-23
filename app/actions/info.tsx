@@ -23,12 +23,13 @@ export async function infoRecipe(recipe: string, ingredients: string) {
 3. **Sequential Steps**: 
    - Explain every single step using standard sequential numbering starting with "1. ", "2. ", "3. ".
    - Each step must be on its own individual line. Do NOT leave empty lines between steps.
+   - After the last step, you must list the utilized ingredients in this recipe, this ingredients MUST NOT be greater than the ingredients listed in the input, though they can be smaller and/or not be listed at all.
 
 ### ABSOLUTE FORMATTING LOCKDOWN (ZERO TOLERANCE):
 - **No Meta-Commentary**: Absolutely NO conversational filler, NO introductory text, and NO parenthetical notes (e.g., do NOT write things like "(I removed the 'a'...)" or "(Note: adjusted quantities)"). 
 - **System Constraints**: Your output is processed directly by an automated string-parsing script. Any extra word, character, note, or clarification outside the requested template will completely crash the production application.
 - **First Character**: The very first character of your entire response MUST be the number "1".
-- Immediately after the final step, write exactly the delimiter "&&", and then list ONLY the ingredients used in this recipe (one per line, with their used quantities, without bullet points or dashes).
+- Immediately after the final step, write exactly the delimiter "&&", and then list ONLY the ingredients used in this recipe (one per line, with their used quantities using bullet points).
 
 ### TARGET TEMPLATE:
 1. Step one instructions here.
@@ -41,6 +42,6 @@ export async function infoRecipe(recipe: string, ingredients: string) {
     ],
   });
   const output = response.choices[0].message.content?.split('&&')
-  if(output) return {ingredientsOutput: output[1], stepsOutput: output[0]};
-  return {ingredientsOutput: null, stepsOutput: null}
+  if(output) return {stepsOutput: output[0].trim(), ingredientsOutput: output[1].trim()};
+  return {stepsOutput: null, ingredientsOutput: null}
 }

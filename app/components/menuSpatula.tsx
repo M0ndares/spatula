@@ -12,9 +12,9 @@ interface MenuSpatulaProps {
 }
 export default function MenuSpatula({ onSelectRecipe }: MenuSpatulaProps) {
   const topRecipes = [
-    '2bafe6b2-fedf-47dd-9562-fdf278fbea84', 
-    'b8558334-39e5-4837-809a-894c6dd03643', 
-    'd3e734a7-3eb5-47d0-88c7-4ed363a50e7b'
+    '59840c00-b1cd-4a46-8afe-1843a63f6a94', 
+    'd20521c7-436e-4be0-a307-a0e51f9a4b2e', 
+    'fae280c8-950e-47eb-9973-a4e6b34b7547'
   ];
   
   const [recipes, setRecipes] = useState<RecipesTemplate[]>([]);
