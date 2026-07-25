@@ -4,7 +4,9 @@ import { eq } from "drizzle-orm";
 import { recipes } from "@/app/db/schema";
 
 export async function getRecipeById(id: string) {
-  return db.select().from(recipes).where(eq(recipes.id, id))
+  const recipe = await db.select().from(recipes).where(eq(recipes.id, id))
+  if (recipe.length == 0) return null;
+  return recipe[0] || null;
 }
 
 export async function getRecipeByName(name: string) {
