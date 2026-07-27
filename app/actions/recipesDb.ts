@@ -6,7 +6,7 @@ import { recipes } from "@/app/db/schema";
 export async function getRecipeById(id: string) {
   const recipe = await db.select().from(recipes).where(eq(recipes.id, id))
   if (recipe.length == 0) return null;
-  return recipe[0] || null;
+  return recipe[0];
 }
 
 export async function getRecipeByName(name: string) {

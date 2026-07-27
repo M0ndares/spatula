@@ -9,16 +9,16 @@ interface PageProps {
 export default async function RecipeDetail({ params }: PageProps) {
   const resolvedParams = await params;
   const recipeId = resolvedParams.id;
-  const currentRecipe = await getRecipeById(recipeId) || null;
+  const currentRecipe = await getRecipeById(recipeId);
   return (
     <div className="mt-4">
-      {currentRecipe.length > 0 && (
+      {currentRecipe && (
         <div>
           <InfoRecipe 
-            id={currentRecipe[0].id}
-            name={currentRecipe[0].name} 
-            ingredients={currentRecipe[0].ingredients} 
-            steps={currentRecipe[0].steps} 
+            id={currentRecipe.id}
+            name={currentRecipe.name} 
+            ingredients={currentRecipe.ingredients} 
+            steps={currentRecipe.steps} 
           />
         </div>
       )}
